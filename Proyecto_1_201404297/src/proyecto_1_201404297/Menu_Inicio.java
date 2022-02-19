@@ -97,6 +97,8 @@ public void opcion1(){
             System.out.println("La direccion ingresada es: "+direccion_carga+" ");
             leerjson();
             recepcion.imprimir();
+            System.out.println("salio el cliente: "+recepcion.descolar().id +"\n");
+            recepcion.imprimir();
             opcion1();
             break;
         case 2:

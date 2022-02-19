@@ -9,14 +9,14 @@ package proyecto_1_201404297;
  * @author adria
  */
 
-class Nodo_cola{
+class Nodo{
     int id;
     String nombre;
     int color;
     int bw;
-    Nodo_cola siguiente;
+    Nodo siguiente;
     
-    public Nodo_cola(int id_cliente,String nombre_cliente,int img_color, int img_bw){
+    public Nodo(int id_cliente,String nombre_cliente,int img_color, int img_bw){
         this.id = id_cliente;
         this.nombre = nombre_cliente;
         this.color = img_color;
@@ -26,30 +26,43 @@ class Nodo_cola{
 }
 
 public class Cola_Recepcion {
-    Nodo_cola inicio;
+    Nodo inicio;
+    Nodo fin;
     
     public Cola_Recepcion(){
         this.inicio = null;
+        this.fin = null;
     }
     
 public void encolar(int id_cliente,String nombre_cliente,int img_color,int img_bw){
-    Nodo_cola nuevo = new Nodo_cola(id_cliente, nombre_cliente, img_color, img_bw);
+    Nodo nuevo = new Nodo(id_cliente, nombre_cliente, img_color, img_bw);
      if(inicio == null){
-            inicio = nuevo;
+            inicio = fin = nuevo;
         }else{
-            Nodo_cola aux = inicio;
-            while (aux!=null){
-                if(aux.siguiente==null){
-                    aux.siguiente=nuevo;
-                    break;
-                }
-                aux = aux.siguiente;
-            } 
+             fin.siguiente = nuevo;
+             fin = nuevo;        
         }
 }
 
-    public void imprimir(){
-    Nodo_cola aux = inicio;
+public Nodo descolar(){
+    if(inicio == null){
+        System.out.println("\n NO HAY CLIENTES EN LA COLA \n");
+        return null;
+    }else{
+        Nodo aux = inicio;
+        Nodo elemento ;
+    while(aux.siguiente != fin){
+        aux = aux.siguiente;
+    }
+        elemento = aux.siguiente;
+        aux.siguiente = null;
+        fin = aux;
+        return elemento;
+    }   
+}
+
+public void imprimir(){
+    Nodo aux = inicio;
     if(aux==null){
         System.out.println("Lista vacia");
     }else{
