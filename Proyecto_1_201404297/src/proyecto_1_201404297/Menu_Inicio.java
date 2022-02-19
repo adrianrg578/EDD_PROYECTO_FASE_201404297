@@ -5,6 +5,15 @@
 package proyecto_1_201404297;
 
 import java.util.Scanner;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
 
 /**
  *
@@ -13,6 +22,8 @@ import java.util.Scanner;
 public class Menu_Inicio {
     
     boolean parametro = false;
+    String direccion_carga = "";
+    Cola_Recepcion recepcion = new Cola_Recepcion();
     public Menu_Inicio(){
     
     }
@@ -82,9 +93,10 @@ public void opcion1(){
             System.out.println("\n \n");
             System.out.println("INSERTE DIRECCION");
             System.out.println("Direccion: \n");
-            String direccion = "";
-            direccion = sc.nextLine();
-            System.out.println("La direccion ingresada es: "+direccion+" ");
+            direccion_carga = sc.nextLine();
+            System.out.println("La direccion ingresada es: "+direccion_carga+" ");
+            leerjson();
+            recepcion.imprimir();
             opcion1();
             break;
         case 2:
@@ -112,7 +124,29 @@ public void opcion2(){
 }
 
 public void leerjson(){
-
+    JSONParser parser = new JSONParser();
+    
+    try(Reader reader = new FileReader(direccion_carga)) {
+        JSONObject objetojson = (JSONObject) parser.parse(reader);
+        System.out.println(objetojson);
+        if(objetojson.size() > 0){
+            for(Iterator iterator = objetojson.keySet().iterator();iterator.hasNext();){
+                String key = (String) iterator.next();
+                JSONObject valor = (JSONObject)objetojson.get(key);
+                int id = Integer.parseInt((String) valor.get("id_cliente"));
+                String nombre = (String) valor.get("nombre_cliente");
+                int color = Integer.parseInt((String) valor.get("img_color"));
+                int bw = Integer.parseInt((String) valor.get("img_bw"));
+                recepcion.encolar(id, nombre, color, bw);
+            }
+        }
+        
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (ParseException e){
+        e.printStackTrace();
+    }
+    
 }
 
 
