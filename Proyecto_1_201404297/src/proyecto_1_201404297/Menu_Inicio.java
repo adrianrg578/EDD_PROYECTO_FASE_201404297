@@ -22,7 +22,8 @@ import java.util.Iterator;
  * @author adria
  */
 public class Menu_Inicio {
-    
+
+    int paso = 0;
     boolean parametro_cm = false;
     boolean parametro_v = false;
     String direccion_carga = "";
@@ -54,12 +55,20 @@ System.out.println("-------------------- MENU --------------------");
             break;
         case 2:
             System.out.println("ACA VAN LOS PASOS \n");
-            principal();
+            pasos();
+        principal();
             break;
         case 3:
             System.out.println("ACA VA EL ESTADO DE LAS ESTRUCTURAS \n");
             archivotxt(recepcion.gentxt(),"Cola_recepcion.txt");
             archivopng(direccion_parcial,"Cola_recepcion.txt");
+            Nodo_ls aux = ventanas.inicio;
+            while(aux != null){
+                archivotxt(aux.imagenes.gentxt(),"Pila_ventanilla"+aux.id_ventanilla+".txt");
+                archivopng(direccion_parcial,"Pila_ventanilla"+aux.id_ventanilla+".txt");
+                aux = aux.siguiente;
+            }
+            
             principal();
             break;
         case 4:
@@ -141,8 +150,51 @@ public void opcion1(){
     
 }
 
-public void opcion2(){
-
+public void pasos(){
+    paso++;
+    int v = 0;
+    int tot_img= 0;
+    System.out.println("------------------- PASO "+paso+" -------------------");
+    if(ventanas.esta_vacia()==true){
+        Nodo_cola aux = recepcion.descolar();
+        ventanas.ingreso_ventanilla(aux);
+        Nodo_ls vent_actual = ventanas.buscar(aux.id);
+        if (vent_actual!=null){
+             v = vent_actual.id_ventanilla;
+             tot_img=vent_actual.cantidad_img;
+        }else{
+            System.out.println("NO existe el cliente en la ventanilla");
+        }
+        System.out.println("INGRESO EL CLIENTE "+aux.id+" a la ventanilla "+v+" total img: "+tot_img);
+    }else{
+        Nodo_ls aux= ventanas.inicio;
+        while(aux!=null){
+        if(aux.imagenes.tamanio<aux.cantidad_img){
+            if(aux.imagenes.t_cl< aux.ci_cl){
+                aux.imagenes.insertar("color", aux.cliente.id);
+                aux.imagenes.t_cl++;
+                System.out.println("Se ingreso una imagen a "+aux.imagenes.cima.imagen+" cliente: "
+                        + aux.imagenes.cima.id_cliente);
+                aux = aux.siguiente;
+            }else{
+                if(aux.imagenes.t_bw<aux.ci_bw){
+                    aux.imagenes.insertar("blanco y negro",aux.cliente.id);
+                    aux.imagenes.t_bw++;
+                    System.out.println("Se ingreso una imagen a "+aux.imagenes.cima.imagen+" cliente: "
+                        + aux.imagenes.cima.id_cliente);
+                    aux = aux.siguiente;
+                }else{
+                      System.out.println("se termino de recibir las imagenes");
+                      aux = aux.siguiente;
+                }
+            }
+        }else{
+            System.out.println("se termino de recibir las imagenes: ventanilla "+aux.id_ventanilla+" llena");
+            System.out.println("Aqui se mueven las imagenes a las impresoras y el cliente a la espera");
+            aux = aux.siguiente;
+        }
+        }
+    }
 }
 
 public void leerjson(){

@@ -100,5 +100,4 @@ public String gentxt(){
     return grafotxt;
 }
 
-
 }
