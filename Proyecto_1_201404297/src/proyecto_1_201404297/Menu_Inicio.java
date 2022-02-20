@@ -4,26 +4,31 @@
  */
 package proyecto_1_201404297;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.util.Scanner;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.Iterator;
-
 /**
  *
  * @author adria
  */
 public class Menu_Inicio {
     
-    boolean parametro = false;
+    boolean parametro_cm = false;
+    boolean parametro_v = false;
     String direccion_carga = "";
+    String direccion_parcial = "C:\\Users\\adria\\Desktop\\Grafos";
     Cola_Recepcion recepcion = new Cola_Recepcion();
+    Lista_Simple ventanas = new Lista_Simple();
     public Menu_Inicio(){
     
     }
@@ -53,6 +58,8 @@ System.out.println("-------------------- MENU --------------------");
             break;
         case 3:
             System.out.println("ACA VA EL ESTADO DE LAS ESTRUCTURAS \n");
+            archivotxt(recepcion.gentxt(),"Cola_recepcion.txt");
+            archivopng(direccion_parcial,"Cola_recepcion.txt");
             principal();
             break;
         case 4:
@@ -90,15 +97,20 @@ public void opcion1(){
     sc.nextLine();
     switch (opcion1) {
         case 1:
-            System.out.println("\n \n");
+            System.out.println("\n ");
             System.out.println("INSERTE DIRECCION");
-            System.out.println("Direccion: \n");
-            direccion_carga = sc.nextLine();
-            System.out.println("La direccion ingresada es: "+direccion_carga+" ");
-            leerjson();
-            recepcion.imprimir();
-            System.out.println("salio el cliente: "+recepcion.descolar().id +"\n");
-            recepcion.imprimir();
+            System.out.println("Direccion: ");
+            String dir = sc.nextLine();
+            if(direccion_carga == ""){
+                direccion_carga = dir;
+                leerjson();
+            }else{
+                if(direccion_carga == dir){
+                    System.out.println("El ARCHIVO YA HA SIDO CARGADO");
+                }else{
+                    System.out.println("YA SE HA CARGADO UN ARCHIVO ANTERIORMENTE");
+                }
+            }
             opcion1();
             break;
         case 2:
@@ -107,7 +119,15 @@ public void opcion1(){
             int ventanillas;
             ventanillas =sc.nextInt();
             sc.nextLine();
-            System.out.println("LA CANTIDAD DE VENTANILLAS: "+ventanillas);
+            if(ventanillas == 0){
+                System.out.println("EL NUMERO DE VENTANILLAS NO PUEDE SER CERO");
+            }else{
+                for(int i = 1; i < ventanillas+1;i++ ){
+                    ventanas.creacion_ventanilla(i);
+                }
+                
+                System.out.println("hay: " +ventanas.tamanio);
+            }
             opcion1();
             break;
         case 3:
@@ -130,7 +150,7 @@ public void leerjson(){
     
     try(Reader reader = new FileReader(direccion_carga)) {
         JSONObject objetojson = (JSONObject) parser.parse(reader);
-        System.out.println(objetojson);
+      //System.out.println(objetojson);
         if(objetojson.size() > 0){
             for(Iterator iterator = objetojson.keySet().iterator();iterator.hasNext();){
                 String key = (String) iterator.next();
@@ -140,16 +160,65 @@ public void leerjson(){
                 int color = Integer.parseInt((String) valor.get("img_color"));
                 int bw = Integer.parseInt((String) valor.get("img_bw"));
                 recepcion.encolar(id, nombre, color, bw);
+                
             }
         }
-        
+        parametro_cm = true;
     } catch (IOException e) {
-        e.printStackTrace();
+        System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+        parametro_cm = false;
     } catch (ParseException e){
-        e.printStackTrace();
+        System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+        parametro_cm = false;
     }
     
 }
 
+public void archivotxt(String grafo,String estructura){
+    try {
+        String ruta = "";
+        ruta+= direccion_parcial+"\\"+estructura;
+        File f;
+        f = new File(ruta);
+        
+        FileWriter w = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);
+        wr.write(grafo);
+        wr.close();
+        bw.close();
+    } catch (Exception e) {
+        System.out.println("NO SE PUDO CREAR EL ARCHIVO");
+    }
+}
 
+    public void archivopng(String ruta,String estructura){
+        try {
+      String ruta_a ="";
+      ruta_a +=ruta+"\\"+estructura;
+      
+      String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+      
+      String fileInputPath =ruta_a;
+      String fileOutputPath =ruta_a.replace(".txt", ".jpg");
+      
+      String tParam = "-Tjpg";
+      String tOParam = "-o";
+        
+      String[] cmd = new String[5];
+      cmd[0] = dotPath;
+      cmd[1] = tParam;
+      cmd[2] = fileInputPath;
+      cmd[3] = tOParam;
+      cmd[4] = fileOutputPath;
+                  
+      Runtime rt = Runtime.getRuntime();
+      
+      rt.exec( cmd );
+      
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+        
+    }
 }
