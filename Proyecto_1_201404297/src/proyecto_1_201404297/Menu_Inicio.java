@@ -66,12 +66,12 @@ System.out.println("-------------------- MENU --------------------");
             opcion1();
             break;
         case 2:
-            System.out.println("ACA VAN LOS PASOS \n");
+            //System.out.println("ACA VAN LOS PASOS \n");
             pasos();
         principal();
             break;
         case 3:
-            System.out.println("ACA VA EL ESTADO DE LAS ESTRUCTURAS \n");
+            System.out.println("SE GENERARON LOS GRAFOS, REVISE SU CARPETA\n");
             archivotxt(recepcion.gentxt(),"Cola_recepcion.txt");
             archivopng(direccion_parcial,"Cola_recepcion.txt");
             archivotxt(ventanas.gentxt(),"Lista_simple_ventanilla.txt");
@@ -209,7 +209,7 @@ public void pasos(){
             }
         }else{
             //System.out.println("se termino de recibir las imagenes: ventanilla "+aux.id_ventanilla+" llena");
-            System.out.println("Aqui se mueven las imagenes a las impresoras y el cliente a la espera");
+            System.out.println("se mueven las imagenes a las impresoras y el cliente a la espera");
             Nodo_ls actual = aux;
             Pila extraida = actual.imagenes;
             Lista_Espera.insertar(actual.cliente,actual.id_ventanilla);
@@ -221,10 +221,37 @@ public void pasos(){
                     Blanco_Negro.insertar(nodo.id_cliente,nodo.imagen);
                 }
             }
-            
+            actual.cantidad_img=0;
+            actual.ocupada=false;
+            actual.ci_cl=0;
+            actual.ci_bw=0;
+            actual.cliente=null;
             aux = aux.siguiente;
+            impresora();
+           
         }
         }
+    }
+}
+
+public void impresora(){
+    int t_impresorac = A_Color.tamanio;
+    int t_impresorab = Blanco_Negro.tamanio;
+    if(t_impresorac>0){
+        Nodo_ci nci = A_Color.descolar();
+        Nodo_DE actual = Lista_Espera.buscar(nci.id_cliente);
+        actual.imagenes_impresas.insertar(nci.imagen,nci.id_cliente);
+        actual.pasos=actual.pasos+2;
+        System.out.println("SE ENVIO UNA IMAGEN A COLOR A: "+nci.id_cliente);
+    }else{
+    
+    }
+    if(t_impresorab>0){
+        Nodo_ci nc = Blanco_Negro.descolar();
+        Nodo_DE act = Lista_Espera.buscar(nc.id_cliente);
+        act.imagenes_impresas.insertar(nc.imagen,nc.id_cliente);
+        act.pasos++;
+        System.out.println("SE ENVIO UNA IMAGEN BLANCO Y NEGRO A: "+nc.id_cliente);
     }
 }
 

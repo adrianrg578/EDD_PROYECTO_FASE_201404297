@@ -51,6 +51,10 @@ public Nodo_cola descolar(){
     }else{
         Nodo_cola aux = inicio;
         Nodo_cola elemento ;
+        if(aux == fin){
+            elemento = aux;
+            return elemento;
+        }else{
     while(aux.siguiente != fin){
         aux = aux.siguiente;
     }
@@ -58,8 +62,9 @@ public Nodo_cola descolar(){
         aux.siguiente = null;
         fin = aux;
         return elemento;
-        
-    }   
+
+        }
+    } 
 }
 
 public void imprimir(){

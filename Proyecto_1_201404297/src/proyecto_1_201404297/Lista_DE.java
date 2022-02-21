@@ -59,11 +59,19 @@ public void insertar(Nodo_cola cliente, int ventanilla){
 public Nodo_DE buscar(int id_cliente){
     Nodo_DE aux = inicio;
     Nodo_DE resultado = null;
+    if(aux==fin){
+        if(aux.cliente.id==id_cliente){
+            resultado=aux;
+        }else{
+            System.out.println("NO hay cliente con ese codigo");
+        }
+    }else{
     while(aux != fin){
         if(aux.cliente.id==id_cliente){
             resultado=aux;
         }
         aux = aux.siguiente;
+    }
     }
     return resultado;
 }
