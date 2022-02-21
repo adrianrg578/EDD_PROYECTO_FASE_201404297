@@ -23,15 +23,27 @@ import java.util.Iterator;
  */
 public class Menu_Inicio {
 
-    int paso = 0;
-    boolean parametro_cm = false;
-    boolean parametro_v = false;
-    String direccion_carga = "";
-    String direccion_parcial = "C:\\Users\\adria\\Desktop\\Grafos";
-    Cola_Recepcion recepcion = new Cola_Recepcion();
-    Lista_Simple ventanas = new Lista_Simple();
+    int paso;
+    boolean parametro_cm;
+    boolean parametro_v;
+    String direccion_carga;
+    String direccion_parcial;
+    Cola_Recepcion recepcion;
+    Lista_Simple ventanas;
+    Cola_Impresora A_Color;
+    Cola_Impresora Blanco_Negro;
+    Lista_DE Lista_Espera;
     public Menu_Inicio(){
-    
+        this.paso = 0;
+        this.parametro_cm= false;
+        this.parametro_v=false;
+        this.direccion_carga="";
+        this.direccion_parcial = "C:\\Users\\adria\\Desktop\\Grafos";
+        this.recepcion = new Cola_Recepcion();
+        this.ventanas = new Lista_Simple();
+        this.A_Color = new Cola_Impresora();
+        this.Blanco_Negro = new Cola_Impresora();
+        this.Lista_Espera=new Lista_DE();
     }
     
 public void principal(){
@@ -62,13 +74,20 @@ System.out.println("-------------------- MENU --------------------");
             System.out.println("ACA VA EL ESTADO DE LAS ESTRUCTURAS \n");
             archivotxt(recepcion.gentxt(),"Cola_recepcion.txt");
             archivopng(direccion_parcial,"Cola_recepcion.txt");
+            archivotxt(ventanas.gentxt(),"Lista_simple_ventanilla.txt");
+            archivopng(direccion_parcial,"Lista_simple_ventanilla.txt");
             Nodo_ls aux = ventanas.inicio;
             while(aux != null){
                 archivotxt(aux.imagenes.gentxt(),"Pila_ventanilla"+aux.id_ventanilla+".txt");
                 archivopng(direccion_parcial,"Pila_ventanilla"+aux.id_ventanilla+".txt");
                 aux = aux.siguiente;
             }
-            
+            archivotxt(A_Color.gentxt(),"Cola_Impresion_C.txt");
+            archivopng(direccion_parcial,"Cola_Impresion_C.txt");
+            archivotxt(Blanco_Negro.gentxt(),"Cola_Impesion_BW.txt");
+            archivopng(direccion_parcial,"Cola_Impresion_BW.txt");
+            archivotxt(Lista_Espera.gentxt(),"Lista_Circular_Doble.txt");
+            archivopng(direccion_parcial,"Lista_Circular_Doble.txt");
             principal();
             break;
         case 4:
@@ -189,8 +208,20 @@ public void pasos(){
                 }
             }
         }else{
-            System.out.println("se termino de recibir las imagenes: ventanilla "+aux.id_ventanilla+" llena");
+            //System.out.println("se termino de recibir las imagenes: ventanilla "+aux.id_ventanilla+" llena");
             System.out.println("Aqui se mueven las imagenes a las impresoras y el cliente a la espera");
+            Nodo_ls actual = aux;
+            Pila extraida = actual.imagenes;
+            Lista_Espera.insertar(actual.cliente,actual.id_ventanilla);
+            while(extraida.cima!=null){
+                Nodo_pila nodo = extraida.extraer_cima();
+                if(nodo.imagen=="color"){
+                    A_Color.insertar(nodo.id_cliente,nodo.imagen);
+                }else{
+                    Blanco_Negro.insertar(nodo.id_cliente,nodo.imagen);
+                }
+            }
+            
             aux = aux.siguiente;
         }
         }

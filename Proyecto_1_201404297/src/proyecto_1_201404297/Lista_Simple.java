@@ -116,6 +116,29 @@ public Nodo_ls buscar(int id){
     }
     return null;
 }
+
+public String gentxt(){
+    String nodos = "";
+    String conexiones = "";
+    String grafotxt = "digraph Ventanillas { rankdir = TB; \n";
+    String f = "shape=box,";
+    Nodo_ls aux = inicio;
+    while(aux!=null){
+     nodos += "N"+aux.hashCode()+"["+f +"label = \""+"Ventanilla: "+aux.id_ventanilla+"\\n"+aux.cliente.nombre+"\\n"
+             +"id_cliente: "+aux.cliente.id+"\\n \"];\n";
+             if(aux.siguiente!=null){
+                 conexiones+="N"+aux.hashCode()+"->"+"N"+aux.siguiente.hashCode()+";\n";
+             }
+             aux = aux.siguiente;
+    }
+    grafotxt += nodos;
+    grafotxt += "{rank = same; \n";
+    grafotxt += conexiones;
+    grafotxt += "}\n";
+    grafotxt += "}\n";
+    
+    return grafotxt;
+}
     
 }
 //para imagen a color sera 2 y para blanco y negro sera 1
@@ -177,6 +200,13 @@ public Nodo_pila extraer_cima(){
     }else{
         Nodo_pila aux = fondo;
         Nodo_pila elem;
+        if(aux==cima){
+            elem = aux;
+            cima=null;
+            fondo=null;
+            tamanio--;
+            return elem;
+        }else{
         while(aux.siguiente != cima){
             aux = aux.siguiente;
         }
@@ -185,6 +215,7 @@ public Nodo_pila extraer_cima(){
         cima = aux;
         tamanio--;
         return elem;
+        }
     }   
 }
 

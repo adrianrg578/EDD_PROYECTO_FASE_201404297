@@ -58,10 +58,30 @@ public Nodo_ci descolar(){
         aux.siguiente = null;
         fin = aux;
         tamanio--;
-        return elemento;
-       
-        
+        return elemento;       
     }   
 }
+
+public String gentxt(){
+    String nodos = "";
+    String conexiones = "";
+    String grafotxt = "digraph Cola_Impresion { \n";
+    String f = "shape=box,";
+    Nodo_ci aux = inicio;
+    while(aux!=null){
+     nodos += "N"+aux.hashCode()+"["+f +"label = \""+aux.id_cliente+"\\n"+aux.imagen+"\\n"+ "\"];\n";
+             if(aux.siguiente!=null){
+                 conexiones+="N"+aux.hashCode()+"->"+"N"+aux.siguiente.hashCode()+";\n";
+             }
+             aux = aux.siguiente;
+    }
+    grafotxt += nodos;
+    grafotxt += "{rank = same; \n";
+    grafotxt += conexiones;
+    grafotxt += "}\n";
+    grafotxt += "}\n";
     
+    return grafotxt;
+}
+
 }
