@@ -221,10 +221,7 @@ public void pasos(){
                     Blanco_Negro.insertar(nodo.id_cliente,nodo.imagen);
                 }
             }
-            actual.cantidad_img=0;
             actual.ocupada=false;
-            actual.ci_cl=0;
-            actual.ci_bw=0;
             actual.cliente=null;
             aux = aux.siguiente;
             impresora();
