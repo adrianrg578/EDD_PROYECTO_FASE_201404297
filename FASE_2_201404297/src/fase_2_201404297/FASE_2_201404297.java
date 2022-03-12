@@ -15,6 +15,8 @@ public class FASE_2_201404297 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Login log = new Login();
+        log.setVisible(true);
     }
     
 }
