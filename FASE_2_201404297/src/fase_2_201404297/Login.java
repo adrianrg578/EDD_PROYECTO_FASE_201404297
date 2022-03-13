@@ -55,6 +55,11 @@ public class Login extends javax.swing.JFrame {
 
         jb_registro.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jb_registro.setText("Registrarse");
+        jb_registro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_registroActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Bienvenido a UDrawing Paper");
@@ -66,7 +71,7 @@ public class Login extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(93, 93, 93)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,6 +132,13 @@ public class Login extends javax.swing.JFrame {
             System.out.println(pass);
         }
     }//GEN-LAST:event_jb_ingresarActionPerformed
+
+    private void jb_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_registroActionPerformed
+        // TODO add your handling code here:
+        Registro reg = new Registro();
+        reg.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jb_registroActionPerformed
 
     /**
      * @param args the command line arguments
