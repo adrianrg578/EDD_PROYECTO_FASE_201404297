@@ -4,6 +4,21 @@
  */
 package fase_2_201404297;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 /**
  *
  * @author adria
@@ -27,24 +42,38 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jm_inicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 452, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(136, Short.MAX_VALUE))
         );
 
         jm_inicio.setText("Inicio");
@@ -52,9 +81,21 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem1.setText("Cerrar Sesion");
         jm_inicio.add(jMenuItem1);
 
+        jMenuItem2.setText("Iniciar Sesion");
+        jm_inicio.add(jMenuItem2);
+
         jMenuBar1.add(jm_inicio);
 
         jMenu3.setText("Archivo");
+
+        jMenuItem3.setText("Cargar Capas");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
         jMenuBar1.add(jMenu3);
 
         jMenu1.setText("Reportes");
@@ -84,6 +125,22 @@ public class Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        leerjson(archivo.getAbsolutePath());
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,7 +183,57 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu jm_inicio;
     // End of variables declaration//GEN-END:variables
+
+    //metodos externos
+    public void leerjson(String direccion){
+        JSONParser parser = new JSONParser();
+        //prueba de la creacion de una matriz borrar despues
+        ArrayList<Matriz> matrices = new ArrayList<>();
+        
+        try(Reader reader = new FileReader(direccion)){
+            JSONArray arrayobj = (JSONArray) parser.parse(reader);
+            //System.out.println(arrayobj);
+            
+            if(arrayobj.size()>0){
+               for(int n = 0; n <arrayobj.size(); n++){
+                   JSONObject valor = (JSONObject) arrayobj.get(n);
+                   long capa =  (Long) valor.get("id_capa");
+                   JSONArray valor_pixel = (JSONArray) valor.get("pixeles");
+                   jTextArea1.append("Numero de Capa: "+String.valueOf(capa));
+                   jTextArea1.append(System.getProperty("line.separator"));
+                   Matriz matriz = new Matriz(n);
+
+                   for(int i = 0; i <valor_pixel.size();i++){
+                       JSONObject valor_interno_pixel = (JSONObject) valor_pixel.get(i);
+                       long columna =(Long) valor_interno_pixel.get("columna");
+                       long fila = (Long) valor_interno_pixel.get("fila");
+                       String color = (String) valor_interno_pixel.get("color");
+                       jTextArea1.append("Col: "+String.valueOf(columna));
+                       jTextArea1.append(System.getProperty("line.separator"));
+                       jTextArea1.append("fil: "+String.valueOf(fila));
+                       jTextArea1.append(System.getProperty("line.separator"));
+                       jTextArea1.append("Color: "+color);
+                       jTextArea1.append(System.getProperty("line.separator"));
+                       matriz.insertar_nodo((int)columna,(int) fila, color);
+                   }
+                   matrices.add(matriz);
+               }
+            }
+ 
+        
+        } catch (IOException e) {
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+        } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+        }
+    
+    
+    }
 }
