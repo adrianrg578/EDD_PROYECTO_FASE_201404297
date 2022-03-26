@@ -19,7 +19,7 @@ class NodoMatriz{
     NodoMatriz arriba;
     NodoMatriz abajo;
     
-    public NodoMatriz(int y, int x, String dato){
+    public NodoMatriz(int x,int y, String dato){
         this.x = x;
         this.y = y;
         this.color = dato;
@@ -64,7 +64,7 @@ public class Matriz {
     
     public NodoMatriz crear_columna(int x){
         NodoMatriz nodo_columna = raiz;
-        NodoMatriz nuevo = new NodoMatriz(x,-1,"col");
+        NodoMatriz nuevo = new NodoMatriz(x,-1,"CABECERA_COLUMNA");
         NodoMatriz columna = insertar_ord_col(nuevo,nodo_columna);
         return columna;
     }
@@ -102,7 +102,7 @@ public class Matriz {
     
     public NodoMatriz crear_fila(int y){
         NodoMatriz nodo_fila = raiz;
-        NodoMatriz nuevo = new NodoMatriz(-1,y,"Fila");
+        NodoMatriz nuevo = new NodoMatriz(-1,y,"CABECERA_FILA");
         NodoMatriz fila = insertar_ord_fila(nuevo,nodo_fila);
         return fila;
     }
@@ -178,11 +178,51 @@ public class Matriz {
             String texto ="";
             NodoMatriz aux2 = aux;
             while (aux2 != null){
-                texto += "coordenada x: "+aux.x +" Coordenada y: "+aux.y;
+                texto += "coordenada x: "+aux2.x +" Coordenada y: "+aux2.y+"\n";
                 aux2 = aux2.siguiente;
             }
             System.out.println(texto);
             aux = aux.abajo;
         }
+    }
+    
+    public String generartablatxt(){
+        NodoMatriz aux = raiz;
+        String nodo ="";
+        String grafotxt = "digraph Capa { node [shape=plaintext]; \n";
+        String a = "struct1 [ label = <<TABLE> " ;
+        String f = "</TABLE>>]; \n } ";
+        String b = "<tr> \n";
+        String c = "</tr> \n";
+ 
+        while (aux != null){
+            String texto ="";
+            NodoMatriz aux2 = aux;
+            int contador = 1;
+            while (aux2 != null){
+                if(aux2.x == -1 || aux2.y == -1){
+                    System.out.println("Es una cabecera no se imprimira");
+                    aux2 = aux2.siguiente;
+                }else if(aux2.x == contador){
+                    System.out.println(contador+" valor x "+aux2.x);
+                    texto += "<td BGCOLOR = \""+aux2.color+"\">"+"</td> \n";
+                    contador++;
+                    aux2 = aux2.siguiente;
+                }else{
+                    System.out.println("se trabo aca "+contador);
+                    texto += "<td BGCOLOR =\"WHITE\"></td>\n";
+                    contador++;
+                }      
+            }
+            System.out.println(texto);
+            if(texto.length()>0){
+            nodo += b + texto+c;
+            }
+            aux = aux.abajo;
+        }
+        
+        String result = "";
+        result +=grafotxt+a+nodo+f;
+        return result;
     }
 }

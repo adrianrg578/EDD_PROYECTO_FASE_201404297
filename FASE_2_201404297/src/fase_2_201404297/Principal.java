@@ -44,6 +44,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jm_inicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -75,6 +76,13 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(136, Short.MAX_VALUE))
         );
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jm_inicio.setText("Inicio");
 
@@ -111,7 +119,9 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(373, Short.MAX_VALUE)
+                .addGap(127, 127, 127)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -121,6 +131,10 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(189, 189, 189)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -141,6 +155,11 @@ public class Principal extends javax.swing.JFrame {
         leerjson(archivo.getAbsolutePath());
         
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,6 +197,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -215,12 +235,12 @@ public class Principal extends javax.swing.JFrame {
                        long columna =(Long) valor_interno_pixel.get("columna");
                        long fila = (Long) valor_interno_pixel.get("fila");
                        String color = (String) valor_interno_pixel.get("color");
-                       jTextArea1.append("Col: "+String.valueOf(columna));
+                    /*   jTextArea1.append("Col: "+String.valueOf(columna));
                        jTextArea1.append(System.getProperty("line.separator"));
                        jTextArea1.append("fil: "+String.valueOf(fila));
                        jTextArea1.append(System.getProperty("line.separator"));
                        jTextArea1.append("Color: "+color);
-                       jTextArea1.append(System.getProperty("line.separator"));
+                       jTextArea1.append(System.getProperty("line.separator"));*/
                        matriz.insertar_nodo((int)columna,(int) fila, color);
                    }
                    matrices.add(matriz);
@@ -234,6 +254,8 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
         }
     
+        jTextArea1.append(matrices.get(0).generartablatxt());
+
     
     }
 }
