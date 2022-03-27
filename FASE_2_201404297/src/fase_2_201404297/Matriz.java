@@ -4,6 +4,11 @@
  */
 package fase_2_201404297;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 /**
  *
  * @author adria
@@ -144,26 +149,26 @@ public class Matriz {
         NodoMatriz NodoFila = buscar_fila(y);
         
         if(NodoFila == null && NodoColumna == null){
-            System.out.println("NO hay fila ni columna");
+          //  System.out.println("NO hay fila ni columna");
             
             NodoColumna = crear_columna(x);
             NodoFila = crear_fila(y);
             nuevo = insertar_ord_col(nuevo,NodoFila);
             nuevo = insertar_ord_fila(nuevo,NodoColumna);
         }else if(NodoFila ==null && NodoColumna !=null){
-            System.out.println("NO hay fila pero si columna");
+          //  System.out.println("NO hay fila pero si columna");
             
             NodoFila = crear_fila(y);
             nuevo = insertar_ord_col(nuevo, NodoFila);
             nuevo = insertar_ord_fila(nuevo, NodoColumna);
         }else if(NodoFila != null && NodoColumna == null){
-            System.out.println("Hay filla pero no columna");
+           // System.out.println("Hay filla pero no columna");
             
             NodoColumna = crear_columna(x);
             nuevo = insertar_ord_col(nuevo,NodoFila);
             nuevo = insertar_ord_fila(nuevo,NodoColumna);
         }else if(NodoFila !=null && NodoColumna !=null){
-            System.out.println("existe la fila y la columna");
+       //     System.out.println("existe la fila y la columna");
             
             nuevo = insertar_ord_col(nuevo, NodoFila);
             nuevo = insertar_ord_fila(nuevo, NodoColumna);
@@ -186,10 +191,10 @@ public class Matriz {
         }
     }
     
-    public String generartablatxt(){
+    private String generartablatxt(){
         NodoMatriz aux = raiz;
         String nodo ="";
-        String grafotxt = "digraph Capa { node [shape=plaintext]; \n";
+        String grafotxt = "digraph Capa { graph [dpi=300]; \n node [shape=plaintext]; \n";
         String a = "struct1 [ label = <<TABLE> " ;
         String f = "</TABLE>>]; \n } ";
         String b = "<tr> \n";
@@ -198,7 +203,7 @@ public class Matriz {
         while (aux != null){
             String texto ="";
             NodoMatriz aux2 = aux;
-            int contador = 1;
+            int contador = 0;
             while (aux2 != null){
                 if(aux2.x == -1 || aux2.y == -1){
                     System.out.println("Es una cabecera no se imprimira");
@@ -209,7 +214,7 @@ public class Matriz {
                     contador++;
                     aux2 = aux2.siguiente;
                 }else{
-                    System.out.println("se trabo aca "+contador);
+                    System.out.println("se trabo aca "+contador+ " x: "+aux2.x +" y: "+aux2.y);
                     texto += "<td BGCOLOR =\"WHITE\"></td>\n";
                     contador++;
                 }      
@@ -224,5 +229,56 @@ public class Matriz {
         String result = "";
         result +=grafotxt+a+nodo+f;
         return result;
+    }
+    private void archivotxt(String codigo_txt){
+        try {
+        
+        File f;
+        f = new File("capa.txt");
+        if(!f.exists()){
+            f.createNewFile();
+        }
+        FileWriter w = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);
+        wr.write(codigo_txt);
+        wr.close();
+        bw.close();
+    } catch (Exception e) {
+        System.out.println("NO SE PUDO CREAR EL ARCHIVO");
+    }
+    
+    }
+    private void archivopng(){
+        try {
+      String ruta_a ="capa.txt";
+      
+      String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+      
+      String fileInputPath =ruta_a;
+      String fileOutputPath =ruta_a.replace(".txt", ".png");
+      
+      String tParam = "-Tjpg";
+      String tOParam = "-o";
+        
+      String[] cmd = new String[5];
+      cmd[0] = dotPath;
+      cmd[1] = tParam;
+      cmd[2] = fileInputPath;
+      cmd[3] = tOParam;
+      cmd[4] = fileOutputPath;
+                  
+      Runtime rt = Runtime.getRuntime();
+      
+      rt.exec( cmd );
+      
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+        
+    }
+    public void imagen(){
+        archivotxt(generartablatxt());
+        archivopng();
     }
 }

@@ -4,6 +4,8 @@
  */
 package fase_2_201404297;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,8 +14,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,7 +32,8 @@ import org.json.simple.parser.JSONParser;
  * @author adria
  */
 public class Principal extends javax.swing.JFrame {
-
+    ArbolABB arbol_capas = new ArbolABB();
+    DefaultListModel modelo = new DefaultListModel();
     /**
      * Creates new form Principal
      */
@@ -41,10 +50,15 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jt_consola = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jm_inicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -56,33 +70,42 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel1.setText("Capas cargadas");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(136, Short.MAX_VALUE))
-        );
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Imagen de la capa seleccionada");
 
-        jButton1.setText("jButton1");
+        jt_consola.setEditable(false);
+        jt_consola.setColumns(20);
+        jt_consola.setRows(5);
+        jScrollPane1.setViewportView(jt_consola);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Consola");
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButton1.setText("Graficar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jList1.setModel(modelo);
+        jList1.setToolTipText("");
+        jScrollPane2.setViewportView(jList1);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 430, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         jm_inicio.setText("Inicio");
 
@@ -119,22 +142,48 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(127, 127, 127)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(352, 352, 352)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(35, 35, 35))
+                            .addComponent(jButton1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(189, 189, 189)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)
+                                .addGap(368, 368, 368))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(38, 38, 38))
         );
 
         pack();
@@ -158,7 +207,32 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+        Object sel =(Object) jList1.getSelectedValue();
+        String aux = String.valueOf(sel);
+        int aux2 = Integer.parseInt(aux);
+        Matriz capa_sel = arbol_capas.buscar(aux2);
+        if(capa_sel == null){
+            jt_consola.append("La capa buscada no existe o no se encontro.");
+        }else{
+        capa_sel.imagen();
+        }
+        jt_consola.append(String.valueOf(aux2)+"\n");
+        BufferedImage bimg;
+        try{
+            bimg = ImageIO.read(new File("capa.png"));
+            int ancho = bimg.getWidth();
+            int alto = bimg.getHeight();
+            Image image = new ImageIcon("capa.png").getImage();
+            ImageIcon icon = new ImageIcon(image.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+            JLabel etiqueta = new JLabel(icon);
+            JScrollPane scp = new JScrollPane(etiqueta);
+            jPanel1.add(scp);
+            scp.setBounds(0,0,430,535);
+            scp.setViewportView(etiqueta);
+            scp.repaint();
+        } catch(Exception ex){
+            System.out.println("NO se logro motrar la imagen");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -198,6 +272,10 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -207,15 +285,17 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu jm_inicio;
+    private javax.swing.JTextArea jt_consola;
     // End of variables declaration//GEN-END:variables
 
     //metodos externos
     public void leerjson(String direccion){
         JSONParser parser = new JSONParser();
         //prueba de la creacion de una matriz borrar despues
-        ArrayList<Matriz> matrices = new ArrayList<>();
+        //ArrayList<Matriz> matrices = new ArrayList<>();
+
         
         try(Reader reader = new FileReader(direccion)){
             JSONArray arrayobj = (JSONArray) parser.parse(reader);
@@ -226,36 +306,29 @@ public class Principal extends javax.swing.JFrame {
                    JSONObject valor = (JSONObject) arrayobj.get(n);
                    long capa =  (Long) valor.get("id_capa");
                    JSONArray valor_pixel = (JSONArray) valor.get("pixeles");
-                   jTextArea1.append("Numero de Capa: "+String.valueOf(capa));
-                   jTextArea1.append(System.getProperty("line.separator"));
-                   Matriz matriz = new Matriz(n);
+                   Matriz matriz = new Matriz((int)capa);
 
                    for(int i = 0; i <valor_pixel.size();i++){
                        JSONObject valor_interno_pixel = (JSONObject) valor_pixel.get(i);
                        long columna =(Long) valor_interno_pixel.get("columna");
                        long fila = (Long) valor_interno_pixel.get("fila");
                        String color = (String) valor_interno_pixel.get("color");
-                    /*   jTextArea1.append("Col: "+String.valueOf(columna));
-                       jTextArea1.append(System.getProperty("line.separator"));
-                       jTextArea1.append("fil: "+String.valueOf(fila));
-                       jTextArea1.append(System.getProperty("line.separator"));
-                       jTextArea1.append("Color: "+color);
-                       jTextArea1.append(System.getProperty("line.separator"));*/
                        matriz.insertar_nodo((int)columna,(int) fila, color);
                    }
-                   matrices.add(matriz);
+                  // matrices.add(matriz);
+                   arbol_capas.insertar(matriz);
+                   modelo.addElement(matriz.id);
                }
-            }
- 
-        
+            }   
         } catch (IOException e) {
             System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+            jt_consola.append("EL ARCHIVO NO SE PUEDE ABRIR, NO EXISTE \n");
         } catch (org.json.simple.parser.ParseException ex) {
             System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
-        }
-    
-        jTextArea1.append(matrices.get(0).generartablatxt());
+            jt_consola.append("EL ARCHIVO NO ES UN ARCHIVO JSON \n");
 
-    
+        }
+        
+        //lista.setModel(modelo);
     }
 }
