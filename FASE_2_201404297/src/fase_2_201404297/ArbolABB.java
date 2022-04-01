@@ -25,9 +25,11 @@ class NodoABB{
 public class ArbolABB {
     NodoABB raiz ;
     int nodos ;
+    String nodo_c;
     public ArbolABB(){
         this.raiz = null;
         this.nodos=0;
+        this.nodo_c ="";
     }
     
     public void insertar(Matriz capa){
@@ -60,6 +62,34 @@ public class ArbolABB {
         }
         //System.out.println("hay "+ nodos+" nodos en el arbol");
     }
+    
+    public String txt_te(){
+        nodo_c = "";
+        String conexiones ="";
+        String grafotxt = "digraph arbol {rankdir = TB; \n";
+        String f = "shape=ellipse";
+        recorrido(raiz,nodo_c);
+        grafotxt += nodo_c;
+        grafotxt +="}";
+        return grafotxt;
+    }
+    public void recorrido(NodoABB padre, String texto){
+        if(padre!=null){
+            if(padre.izquierdo!=null){
+                nodo_c = nodo_c +"\n" + padre.capa.id + "->"+ padre.izquierdo.capa.id +";";
+            }else{
+                nodo_c = nodo_c + "\n"+ padre.capa.id + "->" +"n_"+ padre.capa.id+";";
+            }
+            if(padre.derecho!=null){
+                nodo_c = nodo_c +"\n" + padre.capa.id + "->"+ padre.derecho.capa.id + ";";
+            }else{
+                nodo_c = nodo_c + "\n"+ padre.capa.id + "->" +"n_"+ padre.capa.id+";";
+            }
+            recorrido(padre.izquierdo,nodo_c);
+            recorrido(padre.derecho,nodo_c);
+        }
+    }
+    
     
     public void inorden(NodoABB padre){
         if(padre != null){

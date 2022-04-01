@@ -10,6 +10,7 @@ package fase_2_201404297;
  */
 class NodoAVL{
     int valor; // aca lleva el valor, ya sera una imagen, nodo etc...
+    ArbolABB arbol_c; // es el arbol de capas que forman las imagenes
     int altura;
     NodoAVL izquierdo;
     NodoAVL derecho;
@@ -19,6 +20,7 @@ class NodoAVL{
         this.altura = 0;
         this.izquierdo =null;
         this.derecho=null;
+        this.arbol_c = null;
     }
 }
 public class ArbolAVL {
@@ -36,8 +38,8 @@ public class ArbolAVL {
         }
     }
     
-    public void insertar(int valor){
-        raiz = insertar(valor,raiz);
+    public void insertar(int id){
+        raiz = insertar(id,raiz);
     }
     
     private NodoAVL insertar(int valor, NodoAVL raiz){

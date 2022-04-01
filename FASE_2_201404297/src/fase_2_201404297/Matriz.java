@@ -194,7 +194,7 @@ public class Matriz {
     private String generartablatxt(){
         NodoMatriz aux = raiz;
         String nodo ="";
-        String grafotxt = "digraph Capa { graph [dpi=300]; \n node [shape=plaintext]; \n";
+        String grafotxt = "digraph Capa_"+id+" { graph [dpi=300]; \n node [shape=plaintext]; \n";
         String a = "struct1 [ label = <<TABLE> " ;
         String f = "</TABLE>>]; \n } ";
         String b = "<tr> \n";
@@ -231,10 +231,10 @@ public class Matriz {
         return result;
     }
     private void archivotxt(String codigo_txt){
+        String n_capa = "capa_"+id+".txt";
         try {
-        
         File f;
-        f = new File("capa.txt");
+        f = new File(n_capa);
         if(!f.exists()){
             f.createNewFile();
         }
@@ -249,36 +249,33 @@ public class Matriz {
     }
     
     }
-    private void archivopng(){
-        try {
-      String ruta_a ="capa.txt";
-      
-      String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
-      
-      String fileInputPath =ruta_a;
-      String fileOutputPath =ruta_a.replace(".txt", ".png");
-      
-      String tParam = "-Tjpg";
-      String tOParam = "-o";
-        
-      String[] cmd = new String[5];
-      cmd[0] = dotPath;
-      cmd[1] = tParam;
-      cmd[2] = fileInputPath;
-      cmd[3] = tOParam;
-      cmd[4] = fileOutputPath;
+    private String archivopng(){
+        String ruta_a ="capa_"+id+".txt";
+        String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+        String fileInputPath =ruta_a;
+        String fileOutputPath =ruta_a.replace(".txt", ".png");
+        String tParam = "-Tjpg";
+        String tOParam = "-o";
+        try {  
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
                   
-      Runtime rt = Runtime.getRuntime();
+            Runtime rt = Runtime.getRuntime();
       
-      rt.exec( cmd );
+            rt.exec( cmd );
       
-    } catch (Exception ex) {
-      ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return fileOutputPath;
     }
-        
-    }
-    public void imagen(){
+    public String imagen(){
         archivotxt(generartablatxt());
-        archivopng();
+        String d_imagen = archivopng();
+        return d_imagen;
     }
 }
