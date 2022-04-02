@@ -67,7 +67,6 @@ public class Principal extends javax.swing.JFrame {
         boton_mostrar_capa = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         lista_capas = new javax.swing.JList<>();
-        jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lista_imagenes = new javax.swing.JList<>();
@@ -78,6 +77,10 @@ public class Principal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        boton_eliminar_imagen = new javax.swing.JButton();
+        label_primera = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jt_reporte = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jm_inicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -91,17 +94,20 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        m_top_imagen = new javax.swing.JMenuItem();
+        mp_arbol_capa = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UDrawing Paper");
+        setLocation(new java.awt.Point(100, 100));
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Capas cargadas");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Imagen de la capa seleccionada");
+        jLabel2.setText("Reporte");
 
         jt_consola.setEditable(false);
         jt_consola.setColumns(20);
@@ -122,19 +128,6 @@ public class Principal extends javax.swing.JFrame {
         lista_capas.setModel(modelo_capa);
         lista_capas.setToolTipText("");
         jScrollPane2.setViewportView(lista_capas);
-
-        jPanel1.setFocusable(false);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Imagenes Cargadas");
@@ -173,6 +166,20 @@ public class Principal extends javax.swing.JFrame {
                 jComboBox1ActionPerformed(evt);
             }
         });
+
+        boton_eliminar_imagen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boton_eliminar_imagen.setText("Eliminar Imagen");
+        boton_eliminar_imagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_eliminar_imagenActionPerformed(evt);
+            }
+        });
+
+        jt_reporte.setEditable(false);
+        jt_reporte.setColumns(20);
+        jt_reporte.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jt_reporte.setRows(5);
+        jScrollPane5.setViewportView(jt_reporte);
 
         jm_inicio.setText("Inicio");
 
@@ -236,6 +243,23 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu4.setText("Reportes");
+
+        m_top_imagen.setText("Top 5 Imagenes");
+        m_top_imagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_top_imagenActionPerformed(evt);
+            }
+        });
+        jMenu4.add(m_top_imagen);
+
+        mp_arbol_capa.setText("Profundidad Arbol Capa");
+        mp_arbol_capa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mp_arbol_capaActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mp_arbol_capa);
+
         jMenuBar1.add(jMenu4);
 
         jMenu2.setText("Mas");
@@ -263,17 +287,23 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(85, 85, 85)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(boton_eliminar_imagen)
+                                .addGap(52, 52, 52)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(label_primera))
+                                    .addComponent(jLabel2)))
                             .addComponent(boton_mostrar_imagen)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel4))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -283,33 +313,38 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(boton_mostrar_capa))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(boton_mostrar_imagen)))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                                .addGap(33, 33, 33)
+                                .addComponent(label_primera)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(boton_eliminar_imagen))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(boton_mostar_album)
-                        .addGap(43, 43, 43)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(boton_mostrar_imagen)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(boton_mostar_album)
+                .addGap(43, 43, 43)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -378,9 +413,14 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_menu_carga_imagenesActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here: Arbol de capas ABB
         String d_img = arbol_capas.imagen();
-        jt_consola.append("\n"+d_img);
+        jt_reporte.setText("");
+        jt_reporte.append("Recorrido Preorden: "+arbol_capas.pre() + "\n");
+        jt_reporte.append("Recorrido Inorden : "+arbol_capas.inorden() + "\n");
+        jt_reporte.append("Recorrido Postorden : "+arbol_capas.post() + "\n");
+        jt_consola.append("\n"+d_img+"\n");
+        jt_consola.append("\n La profundidad del arbol es: "+arbol_capas.profundidad()+"\n");
         imagen_externo(d_img);
 
     }//GEN-LAST:event_jMenuItem7ActionPerformed
@@ -390,7 +430,7 @@ public class Principal extends javax.swing.JFrame {
         Object sel =(Object) lista_imagenes.getSelectedValue();
         Object selectdpi = jComboBox1.getSelectedItem();
          if(arbol_imagenes.raiz!=null){
-            System.out.println(arbol_imagenes.txt_grafo());
+            //System.out.println(arbol_imagenes.txt_grafo());
          }
          if(sel!=null){
             String aux = String.valueOf(sel);
@@ -411,7 +451,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_boton_mostrar_imagenActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here: mostrar arbol de imagenes
         arbol_imagenes.imprimir();
         String d_img = arbol_imagenes.imagen();
         jt_consola.append("\n"+d_img);
@@ -441,6 +481,40 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         //System.out.println(lista_c_album.generartxt());
     }//GEN-LAST:event_boton_mostar_albumActionPerformed
+
+    private void boton_eliminar_imagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_eliminar_imagenActionPerformed
+        // TODO add your handling code here:
+        Object sel =(Object) lista_imagenes.getSelectedValue();
+        Object selectdpi = jComboBox1.getSelectedItem();
+        if(sel!=null){
+            String aux = String.valueOf(sel);
+            int aux2 = Integer.parseInt(aux);
+            int s_dpi = (int)selectdpi;
+            NodoAVL busqueda = arbol_imagenes.buscar(aux2);
+            NodoAVL resul = arbol_imagenes.eliminar(aux2);
+            if(resul==null){
+                jt_consola.append("\n NO se ha eliminado la imagen \n");
+            }else{
+                jt_consola.append("\n Se ha eliminado la imagen, verifique el nuevo arbol \n");
+                modelo_img.removeElement(sel);
+            }   
+         }else{
+             JOptionPane.showMessageDialog(this, "SELECCIONE UNA IMAGEN A MOSTRAR",
+                    "ERROR",JOptionPane.ERROR_MESSAGE);
+         }
+    }//GEN-LAST:event_boton_eliminar_imagenActionPerformed
+
+    private void mp_arbol_capaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mp_arbol_capaActionPerformed
+        // TODO add your handling code here:
+        jt_reporte.setText("");
+        jt_reporte.append("La profundida del arbol de capas es: \n"+arbol_capas.profundidad());
+        
+    }//GEN-LAST:event_mp_arbol_capaActionPerformed
+
+    private void m_top_imagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_top_imagenActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_m_top_imagenActionPerformed
 
     /**
      * @param args the command line arguments
@@ -478,6 +552,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton boton_eliminar_imagen;
     private javax.swing.JButton boton_mostar_album;
     private javax.swing.JButton boton_mostrar_capa;
     private javax.swing.JButton boton_mostrar_imagen;
@@ -498,19 +573,23 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JMenu jm_inicio;
     private javax.swing.JTextArea jt_consola;
+    private javax.swing.JTextArea jt_reporte;
+    private javax.swing.JLabel label_primera;
     private javax.swing.JList<String> lista_album;
     private javax.swing.JList<String> lista_capas;
     private javax.swing.JList<String> lista_imagenes;
+    private javax.swing.JMenuItem m_top_imagen;
     private javax.swing.JMenuItem menu_carga_album;
     private javax.swing.JMenu menu_carga_capas;
     private javax.swing.JMenuItem menu_carga_imagenes;
+    private javax.swing.JMenuItem mp_arbol_capa;
     // End of variables declaration//GEN-END:variables
 
     //metodos externos
@@ -552,17 +631,21 @@ public class Principal extends javax.swing.JFrame {
                    long capa =  (Long) valor.get("id_capa");
                    JSONArray valor_pixel = (JSONArray) valor.get("pixeles");
                    Matriz matriz = new Matriz((int)capa);
-
-                   for(int i = 0; i <valor_pixel.size();i++){
-                       JSONObject valor_interno_pixel = (JSONObject) valor_pixel.get(i);
-                       long columna =(Long) valor_interno_pixel.get("columna");
-                       long fila = (Long) valor_interno_pixel.get("fila");
-                       String color = (String) valor_interno_pixel.get("color");
-                       matriz.insertar_nodo((int)columna,(int) fila, color);
-                   }
-                  // matrices.add(matriz);
-                   arbol_capas.insertar(matriz);
-                   modelo_capa.addElement(matriz.id);
+                   Matriz aux = arbol_capas.buscar((int)capa);
+                   if(aux!=null){
+                        jt_consola.append("\n la capa ya existe");
+                   }else{
+                        for(int i = 0; i <valor_pixel.size();i++){
+                            JSONObject valor_interno_pixel = (JSONObject) valor_pixel.get(i);
+                            long columna =(Long) valor_interno_pixel.get("columna");
+                            long fila = (Long) valor_interno_pixel.get("fila");
+                            String color = (String) valor_interno_pixel.get("color");
+                            matriz.insertar_nodo((int)columna,(int) fila, color);
+                        }
+                        // matrices.add(matriz);
+                        arbol_capas.insertar(matriz);
+                        modelo_capa.addElement(matriz.id);
+                    }
                }
             }   
         } catch (IOException e) {
@@ -588,29 +671,34 @@ public class Principal extends javax.swing.JFrame {
                     JSONObject valor = (JSONObject) arrayobj.get(n);
                     long id = (Long) valor.get("id");
                     JSONArray valor_capas = (JSONArray) valor.get("capas");
-                    ArbolABB arbol = new ArbolABB();
-                    int capaadd = (int) id + 100;
-                    Matriz union = new Matriz(capaadd);
-                    for(int i = 0; i<valor_capas.size();i++){
-                        long capa = (Long)valor_capas.get(i);
-                        Matriz actual = arbol_capas.buscar((int)capa);
-                        if(actual !=null){
-                           arbol.insertar(actual);
-                           //aqui extraigo las coordenadas y color para unificar las capas
-                           NodoMatriz aux = actual.raiz;
-                           while(aux!=null){
-                               NodoMatriz aux2 = aux;
-                               while(aux2!=null){
-                                   union.insertar_nodo(aux2.x,aux2.y, aux2.color);
-                                   aux2 = aux2.siguiente;
-                               }
-                               aux = aux.abajo;
-                           }
-                           // final del recorrido de la capa
+                    NodoAVL result = arbol_imagenes.buscar((int)id);
+                    if(result!=null){
+                        jt_consola.append("\n la imagen ya existe!");
+                    }else{
+                        ArbolABB arbol = new ArbolABB();
+                        int capaadd = (int) id + 100;
+                        Matriz union = new Matriz(capaadd);
+                        for(int i = 0; i<valor_capas.size();i++){
+                            long capa = (Long)valor_capas.get(i);
+                            Matriz actual = arbol_capas.buscar((int)capa);
+                            if(actual !=null){
+                                arbol.insertar(actual);
+                                //aqui extraigo las coordenadas y color para unificar las capas
+                                NodoMatriz aux = actual.raiz;
+                                while(aux!=null){
+                                    NodoMatriz aux2 = aux;
+                                    while(aux2!=null){
+                                        union.insertar_nodo(aux2.x,aux2.y, aux2.color);
+                                        aux2 = aux2.siguiente;
+                                    }
+                                    aux = aux.abajo;
+                                }
+                                // final del recorrido de la capa
+                            }
                         }
+                        modelo_img.addElement(id);
+                        arbol_imagenes.insertar((int)id,arbol,union);
                     }
-                    modelo_img.addElement(id);
-                    arbol_imagenes.insertar((int)id,arbol,union);
                 }
             }
         }catch (IOException e){
@@ -629,7 +717,7 @@ public class Principal extends javax.swing.JFrame {
             JSONArray arrayobj = (JSONArray) parser.parse(reader);
             
             if(arrayobj.size()>0){
-                for(int n = 0; n<arrayobj.size();n++){
+                for(int n = 1; n<=arrayobj.size();n++){
                     JSONObject valor = (JSONObject)arrayobj.get(n);
                     String nombre_a = (String)valor.get("nombre_album");
                     JSONArray valor_img = (JSONArray) valor.get("imgs");
@@ -638,7 +726,7 @@ public class Principal extends javax.swing.JFrame {
                         long img = (Long)valor_img.get(i);
                         lista.insertar((int)img);
                     }
-                    modelo_album.addElement(n+1);
+                    modelo_album.addElement(n);
                     lista_c_album.insertar(n, nombre_a, lista);
                 }
             }
