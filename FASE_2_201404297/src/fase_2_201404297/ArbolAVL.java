@@ -198,7 +198,7 @@ public class ArbolAVL {
         System.out.println("NO SE PUDO CREAR EL ARCHIVO");
         }
     }
-        private String archivopng(){
+    private String archivopng(){
         String ruta_a ="arbolAVL.txt";
         String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
         String fileInputPath =ruta_a;
@@ -226,6 +226,82 @@ public class ArbolAVL {
         archivotxt(txt_grafo());
         String d_imagen = archivopng();
         return d_imagen;
+    }
+    
+    public NodoAVL eliminar(int id){
+        NodoAVL result = null;
+        result = eliminar(raiz,id);
+        return result;
+    }
+    
+    private NodoAVL nodomenor(NodoAVL padre){
+        NodoAVL actual = padre;
+        while(padre.izquierdo!=null){
+            actual = actual.izquierdo;
+        }
+        return actual;
+    }
+    
+    private int obtener_balance(NodoAVL nodo){
+        if(nodo ==null){
+            return 0;
+        }
+        return altura(nodo.izquierdo)-altura(nodo.derecho);
+    }
+    
+    private NodoAVL eliminar(NodoAVL padre,int id){
+        if(raiz==null){
+            return padre;
+        }
+        if(id<padre.valor){
+            padre.izquierdo=eliminar(padre.izquierdo,id);
+        }else if(id>padre.valor){
+            padre.derecho = eliminar(padre.derecho,id);
+        }else{
+            if((padre.izquierdo==null)||(padre.derecho==null)){
+                NodoAVL temp = null;
+                if(temp == padre.izquierdo){
+                    temp = padre.derecho;
+                }else{
+                    temp = padre.izquierdo;
+                }
+                if(temp==null){
+                    temp = padre;
+                    padre = null;
+                }else{
+                    padre = temp;
+                }
+                
+            }else{
+                NodoAVL temp = nodomenor(padre.derecho);
+                padre.valor = temp.valor;
+                padre.arbol_c = temp.arbol_c;
+                padre.matriz_unificada=temp.matriz_unificada;
+                padre.derecho = eliminar(padre.derecho,temp.valor);
+            }
+        }
+        if(padre ==null){
+            return padre;
+        }
+        padre.altura = MAX(altura(padre.izquierdo),altura(padre.derecho))+1;
+        
+        int balance = obtener_balance(padre);
+        
+        if(balance >1 && obtener_balance(padre.izquierdo)>=0){
+            return rd(padre);
+        }
+        if(balance > 1 && obtener_balance(padre.izquierdo)<0){
+            padre.izquierdo = ri(padre.izquierdo);
+            return rd(padre);
+        }
+        if(balance < -1 && obtener_balance(padre.derecho)<=0){
+            return ri(padre);
+        }
+        if(balance < -1 && obtener_balance(padre.derecho)>0){
+            padre.derecho = rd(padre.derecho);
+            return ri(padre);
+        }
+        return padre;
     }
 }
 
