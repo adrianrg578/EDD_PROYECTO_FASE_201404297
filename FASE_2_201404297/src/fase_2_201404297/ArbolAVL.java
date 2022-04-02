@@ -12,11 +12,12 @@ import java.io.PrintWriter;
 /**
  *
  * @author adria
+ * estructura de datos que guarda las imagenes con su respectiva capa
  */
 class NodoAVL{
     int valor; // aca lleva el valor, ya sera una imagen, nodo etc...
     ArbolABB arbol_c; // es el arbol de capas que forman las imagenes
-    Matriz matriz_unificada;
+    Matriz matriz_unificada;//matriz que unifica las capas del arbol
     int altura;
     NodoAVL izquierdo;
     NodoAVL derecho;

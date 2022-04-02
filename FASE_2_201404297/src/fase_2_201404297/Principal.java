@@ -41,6 +41,7 @@ public class Principal extends javax.swing.JFrame {
     DefaultListModel modelo_img = new DefaultListModel();
     DefaultListModel modelo_album = new DefaultListModel();
     DefaultComboBoxModel modelo_dpi = new DefaultComboBoxModel();
+    ListaCircularDE lista_c_album = new ListaCircularDE();
     /**
      * Creates new form Principal
      */
@@ -154,6 +155,11 @@ public class Principal extends javax.swing.JFrame {
 
         boton_mostar_album.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         boton_mostar_album.setText("Mostrar Album");
+        boton_mostar_album.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_mostar_albumActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Albumes Cargados");
@@ -197,6 +203,11 @@ public class Principal extends javax.swing.JFrame {
         menu_carga_capas.add(menu_carga_imagenes);
 
         menu_carga_album.setText("Cargar Albumes");
+        menu_carga_album.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_carga_albumActionPerformed(evt);
+            }
+        });
         menu_carga_capas.add(menu_carga_album);
 
         jMenuBar1.add(menu_carga_capas);
@@ -411,6 +422,26 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void menu_carga_albumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_carga_albumActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        leerjson_album(archivo.getAbsolutePath());
+    }//GEN-LAST:event_menu_carga_albumActionPerformed
+
+    private void boton_mostar_albumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_mostar_albumActionPerformed
+        // TODO add your handling code here:
+        //System.out.println(lista_c_album.generartxt());
+    }//GEN-LAST:event_boton_mostar_albumActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -586,6 +617,35 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
             jt_consola.append("EL ARCHIVO NO SE PUEDE ABRIR, NO EXISTE \n");
         } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+            jt_consola.append("EL ARCHIVO NO ES UN ARCHIVO JSON \n");
+        }
+    }
+    
+    public void leerjson_album(String direccion){
+        JSONParser parser = new JSONParser();
+        
+        try(Reader reader = new FileReader(direccion)){
+            JSONArray arrayobj = (JSONArray) parser.parse(reader);
+            
+            if(arrayobj.size()>0){
+                for(int n = 0; n<arrayobj.size();n++){
+                    JSONObject valor = (JSONObject)arrayobj.get(n);
+                    String nombre_a = (String)valor.get("nombre_album");
+                    JSONArray valor_img = (JSONArray) valor.get("imgs");
+                    Lista_simple lista = new Lista_simple();
+                    for(int i = 0; i<valor_img.size();i++){
+                        long img = (Long)valor_img.get(i);
+                        lista.insertar((int)img);
+                    }
+                    modelo_album.addElement(n+1);
+                    lista_c_album.insertar(n, nombre_a, lista);
+                }
+            }
+        }catch(IOException e){
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+            jt_consola.append("EL ARCHIVO NO SE PUEDE ABRIR, NO EXISTE \n");
+        }catch (org.json.simple.parser.ParseException ex) {
             System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
             jt_consola.append("EL ARCHIVO NO ES UN ARCHIVO JSON \n");
         }
