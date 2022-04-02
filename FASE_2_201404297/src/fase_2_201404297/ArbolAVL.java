@@ -4,6 +4,11 @@
  */
 package fase_2_201404297;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 /**
  *
  * @author adria
@@ -11,20 +16,24 @@ package fase_2_201404297;
 class NodoAVL{
     int valor; // aca lleva el valor, ya sera una imagen, nodo etc...
     ArbolABB arbol_c; // es el arbol de capas que forman las imagenes
+    Matriz matriz_unificada;
     int altura;
     NodoAVL izquierdo;
     NodoAVL derecho;
     
-    public NodoAVL(int valor){
+    public NodoAVL(int valor,ArbolABB arbol,Matriz union){
         this.valor=valor;
         this.altura = 0;
         this.izquierdo =null;
         this.derecho=null;
-        this.arbol_c = null;
+        this.arbol_c = arbol;
+        this.matriz_unificada=union;
     }
 }
 public class ArbolAVL {
     NodoAVL raiz;
+    String nodoavl ="";
+    String nodoint ="";
     
     public ArbolAVL(){
         this.raiz = null;
@@ -38,16 +47,16 @@ public class ArbolAVL {
         }
     }
     
-    public void insertar(int id){
-        raiz = insertar(id,raiz);
+    public void insertar(int id, ArbolABB arbol_capa,Matriz uni){
+        raiz = insertar(id,raiz,arbol_capa,uni);
     }
     
-    private NodoAVL insertar(int valor, NodoAVL raiz){
+    private NodoAVL insertar(int valor, NodoAVL raiz,ArbolABB arbol,Matriz uni){
         if(raiz == null){
-            return new NodoAVL(valor);
+            return new NodoAVL(valor,arbol,uni);
         }else{
             if(valor < raiz.valor){
-                raiz.izquierdo=insertar(valor,raiz.izquierdo);
+                raiz.izquierdo=insertar(valor,raiz.izquierdo,arbol,uni);
                 if(altura(raiz.derecho)-altura(raiz.izquierdo)==-2){
                     if(valor < raiz.izquierdo.valor){
                         raiz = ri(raiz);
@@ -56,7 +65,7 @@ public class ArbolAVL {
                     }
                 }
             }else if(valor>raiz.valor){
-                raiz.derecho = insertar(valor,raiz.derecho);
+                raiz.derecho = insertar(valor,raiz.derecho,arbol,uni);
                 if(altura(raiz.derecho)-altura(raiz.izquierdo)==2){
                     if(valor > raiz.derecho.valor){
                         raiz = rd(raiz);
@@ -66,6 +75,8 @@ public class ArbolAVL {
                 }
             }else{
                 raiz.valor = valor;
+                raiz.arbol_c=arbol;
+                raiz.matriz_unificada = uni;
             }
         }
         raiz.altura = MAX(altura(raiz.izquierdo),altura(raiz.derecho))+1;
@@ -114,7 +125,106 @@ public class ArbolAVL {
         if(nodo!= null){
             imprimir(nodo.izquierdo);
             System.out.println("VALOR: "+nodo.valor);
+            nodo.arbol_c.imprimir();
             imprimir(nodo.derecho);
         }
     }
+    public NodoAVL buscar(int id){
+        int aux =id;
+        NodoAVL resultado = busqueda(raiz,id);
+        return resultado;
+    }
+    
+    private NodoAVL busqueda(NodoAVL padre,int id){
+        NodoAVL aux = null;
+        if(padre!=null){
+            if(padre.valor == id){
+                aux = padre;
+                return aux;
+            }else if(padre.valor > id){
+                aux =busqueda(padre.izquierdo,id);
+            }else{
+                aux = busqueda(padre.derecho,id);
+            }
+        }
+        return aux;
+    }
+    
+    public String txt_grafo(){
+        nodoavl ="";
+        nodoint = "";
+        String grafotxt = "digraph arbolAVL { node [shape=\"box\"] \n";
+        String f = "shape=box";
+        recorrido(raiz,nodoavl);
+        grafotxt += nodoavl;
+        grafotxt += "}";
+        return grafotxt;
+    }   
+    
+    public void recorrido(NodoAVL nodo, String texto){
+        if(nodo!=null){
+            if(nodo.izquierdo != null){
+                nodoavl = nodoavl + "\n"+"img_"+nodo.valor + "->"+"img_"+nodo.izquierdo.valor+";";
+            }else{
+                nodoavl = nodoavl + "\n"+"img_"+nodo.valor + "->"+ "NULL_"+nodo.valor+";";
+            }
+            if(nodo.derecho!=null){
+                nodoavl = nodoavl + "\n"+"img_"+nodo.valor + "->"+"img_"+nodo.derecho.valor+";";
+            }else{
+                nodoavl = nodoavl + "\n"+"img_"+nodo.valor + "->"+ "NULL_"+nodo.valor+";";
+            }
+            recorrido(nodo.izquierdo,nodoavl);
+            recorrido(nodo.derecho, nodoavl);
+        }
+    
+    }
+    
+    private void archivotxt(String codigo_txt){
+        String n_capa = "arbolAVL.txt";
+        try {
+            File f;
+            f = new File(n_capa);
+            if(!f.exists()){
+                f.createNewFile();
+            }
+            FileWriter w = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(w);
+            PrintWriter wr = new PrintWriter(bw);
+            wr.write(codigo_txt);
+            wr.close();
+            bw.close();
+        } catch (Exception e) {
+        System.out.println("NO SE PUDO CREAR EL ARCHIVO");
+        }
+    }
+        private String archivopng(){
+        String ruta_a ="arbolAVL.txt";
+        String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+        String fileInputPath =ruta_a;
+        String fileOutputPath =ruta_a.replace(".txt", ".png");
+        String tParam = "-Tjpg";
+        String tOParam = "-o";
+        try {  
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+                  
+            Runtime rt = Runtime.getRuntime();
+      
+            rt.exec( cmd );
+      
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return fileOutputPath;
+    }
+    public String imagen(){
+        archivotxt(txt_grafo());
+        String d_imagen = archivopng();
+        return d_imagen;
+    }
 }
+

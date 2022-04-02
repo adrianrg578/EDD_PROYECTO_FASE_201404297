@@ -4,6 +4,11 @@
  */
 package fase_2_201404297;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 /**
  *
  * @author adria
@@ -66,7 +71,7 @@ public class ArbolABB {
     public String txt_te(){
         nodo_c = "";
         String conexiones ="";
-        String grafotxt = "digraph arbol {rankdir = TB; \n";
+        String grafotxt = "digraph arbol {node [shape=\"ellipse\"] \n";
         String f = "shape=ellipse";
         recorrido(raiz,nodo_c);
         grafotxt += nodo_c;
@@ -78,12 +83,12 @@ public class ArbolABB {
             if(padre.izquierdo!=null){
                 nodo_c = nodo_c +"\n" + padre.capa.id + "->"+ padre.izquierdo.capa.id +";";
             }else{
-                nodo_c = nodo_c + "\n"+ padre.capa.id + "->" +"n_"+ padre.capa.id+";";
+                nodo_c = nodo_c + "\n"+ padre.capa.id + "->" +"NULL_"+ padre.capa.id+";";
             }
             if(padre.derecho!=null){
                 nodo_c = nodo_c +"\n" + padre.capa.id + "->"+ padre.derecho.capa.id + ";";
             }else{
-                nodo_c = nodo_c + "\n"+ padre.capa.id + "->" +"n_"+ padre.capa.id+";";
+                nodo_c = nodo_c + "\n"+ padre.capa.id + "->" +"NULL_"+ padre.capa.id+";";
             }
             recorrido(padre.izquierdo,nodo_c);
             recorrido(padre.derecho,nodo_c);
@@ -133,5 +138,54 @@ public class ArbolABB {
             }  
         } 
         return aux;
+    }
+    
+    private void archivotxt(String codigo_txt){
+        String n_capa = "arbolABB.txt";
+        try {
+            File f;
+            f = new File(n_capa);
+            if(!f.exists()){
+                f.createNewFile();
+            }
+            FileWriter w = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(w);
+            PrintWriter wr = new PrintWriter(bw);
+            wr.write(codigo_txt);
+            wr.close();
+            bw.close();
+        } catch (Exception e) {
+        System.out.println("NO SE PUDO CREAR EL ARCHIVO");
+        }
+    }
+    
+    private String archivopng(){
+        String ruta_a ="arbolABB.txt";
+        String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+        String fileInputPath =ruta_a;
+        String fileOutputPath =ruta_a.replace(".txt", ".png");
+        String tParam = "-Tjpg";
+        String tOParam = "-o";
+        try {  
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+                  
+            Runtime rt = Runtime.getRuntime();
+      
+            rt.exec( cmd );
+      
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return fileOutputPath;
+    }
+    public String imagen(){
+        archivotxt(txt_te());
+        String d_imagen = archivopng();
+        return d_imagen;
     }
 }

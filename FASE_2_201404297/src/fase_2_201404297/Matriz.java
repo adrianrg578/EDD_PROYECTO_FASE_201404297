@@ -191,10 +191,10 @@ public class Matriz {
         }
     }
     
-    private String generartablatxt(){
+    private String generartablatxt(int dpi){
         NodoMatriz aux = raiz;
         String nodo ="";
-        String grafotxt = "digraph Capa_"+id+" { graph [dpi=300]; \n node [shape=plaintext]; \n";
+        String grafotxt = "digraph Capa_"+id+" { graph [dpi="+dpi+"]; \n node [shape=plaintext]; \n";
         String a = "struct1 [ label = <<TABLE> " ;
         String f = "</TABLE>>]; \n } ";
         String b = "<tr> \n";
@@ -233,21 +233,20 @@ public class Matriz {
     private void archivotxt(String codigo_txt){
         String n_capa = "capa_"+id+".txt";
         try {
-        File f;
-        f = new File(n_capa);
-        if(!f.exists()){
-            f.createNewFile();
-        }
-        FileWriter w = new FileWriter(f);
-        BufferedWriter bw = new BufferedWriter(w);
-        PrintWriter wr = new PrintWriter(bw);
-        wr.write(codigo_txt);
-        wr.close();
-        bw.close();
-    } catch (Exception e) {
+            File f;
+            f = new File(n_capa);
+            if(!f.exists()){
+                f.createNewFile();
+            }
+            FileWriter w = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(w);
+            PrintWriter wr = new PrintWriter(bw);
+            wr.write(codigo_txt);
+            wr.close();
+            bw.close();
+        } catch (Exception e) {
         System.out.println("NO SE PUDO CREAR EL ARCHIVO");
-    }
-    
+        }
     }
     private String archivopng(){
         String ruta_a ="capa_"+id+".txt";
@@ -273,8 +272,8 @@ public class Matriz {
         }
         return fileOutputPath;
     }
-    public String imagen(){
-        archivotxt(generartablatxt());
+    public String imagen(int dpi){
+        archivotxt(generartablatxt(dpi));
         String d_imagen = archivopng();
         return d_imagen;
     }

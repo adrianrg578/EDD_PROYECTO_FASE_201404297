@@ -4,6 +4,7 @@
  */
 package fase_2_201404297;
 
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,9 +16,11 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -37,11 +40,13 @@ public class Principal extends javax.swing.JFrame {
     ArbolAVL arbol_imagenes = new ArbolAVL();
     DefaultListModel modelo_img = new DefaultListModel();
     DefaultListModel modelo_album = new DefaultListModel();
+    DefaultComboBoxModel modelo_dpi = new DefaultComboBoxModel();
     /**
      * Creates new form Principal
      */
     public Principal() {
         initComponents();
+        llenardpi();
     }
 
     /**
@@ -58,26 +63,28 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jt_consola = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        boton_mostrar_capa = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lista_capas = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
-        jButton2 = new javax.swing.JButton();
+        lista_imagenes = new javax.swing.JList<>();
+        boton_mostrar_imagen = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList<>();
-        jButton3 = new javax.swing.JButton();
+        lista_album = new javax.swing.JList<>();
+        boton_mostar_album = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jm_inicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        menu_carga_capas = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        menu_carga_imagenes = new javax.swing.JMenuItem();
+        menu_carga_album = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -103,17 +110,17 @@ public class Principal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Consola");
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setText("Mostrar capa");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        boton_mostrar_capa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boton_mostrar_capa.setText("Mostrar capa");
+        boton_mostrar_capa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                boton_mostrar_capaActionPerformed(evt);
             }
         });
 
-        jList1.setModel(modelo_capa);
-        jList1.setToolTipText("");
-        jScrollPane2.setViewportView(jList1);
+        lista_capas.setModel(modelo_capa);
+        lista_capas.setToolTipText("");
+        jScrollPane2.setViewportView(lista_capas);
 
         jPanel1.setFocusable(false);
 
@@ -131,20 +138,35 @@ public class Principal extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Imagenes Cargadas");
 
-        jList2.setModel(null);
-        jScrollPane3.setViewportView(jList2);
+        lista_imagenes.setModel(modelo_img);
+        jScrollPane3.setViewportView(lista_imagenes);
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setText("Mostrar Imagen");
+        boton_mostrar_imagen.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boton_mostrar_imagen.setText("Mostrar Imagen");
+        boton_mostrar_imagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_mostrar_imagenActionPerformed(evt);
+            }
+        });
 
-        jList3.setModel(null);
-        jScrollPane4.setViewportView(jList3);
+        lista_album.setModel(modelo_album);
+        jScrollPane4.setViewportView(lista_album);
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton3.setText("Mostrar Album");
+        boton_mostar_album.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boton_mostar_album.setText("Mostrar Album");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Albumes Cargados");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Resolucion de imagen");
+
+        jComboBox1.setModel(modelo_dpi);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jm_inicio.setText("Inicio");
 
@@ -156,7 +178,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jm_inicio);
 
-        jMenu3.setText("Archivo");
+        menu_carga_capas.setText("Archivo");
 
         jMenuItem3.setText("Cargar Capas");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -164,20 +186,20 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem3);
+        menu_carga_capas.add(jMenuItem3);
 
-        jMenuItem4.setText("Cargar Imagenes");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        menu_carga_imagenes.setText("Cargar Imagenes");
+        menu_carga_imagenes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                menu_carga_imagenesActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem4);
+        menu_carga_capas.add(menu_carga_imagenes);
 
-        jMenuItem5.setText("Cargar Albumes");
-        jMenu3.add(jMenuItem5);
+        menu_carga_album.setText("Cargar Albumes");
+        menu_carga_capas.add(menu_carga_album);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(menu_carga_capas);
 
         jMenu1.setText("Ver");
 
@@ -190,6 +212,11 @@ public class Principal extends javax.swing.JFrame {
         jMenu1.add(jMenuItem7);
 
         jMenuItem8.setText("Ver Arbol Imagenes");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem8);
 
         jMenuItem6.setText("Ver Listado Albumes");
@@ -213,20 +240,24 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boton_mostar_album)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1)
-                            .addComponent(jButton1)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel1)
+                                .addComponent(boton_mostrar_capa)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel5))
                         .addGap(85, 85, 85)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
-                    .addComponent(jLabel5))
+                            .addComponent(boton_mostrar_imagen)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -248,17 +279,21 @@ public class Principal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1))
+                                .addComponent(boton_mostrar_capa))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2)))
+                                .addComponent(boton_mostrar_imagen)))
                         .addGap(36, 36, 36)
-                        .addComponent(jLabel5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)
+                        .addComponent(boton_mostar_album)
                         .addGap(43, 43, 43)
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
@@ -286,39 +321,26 @@ public class Principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void boton_mostrar_capaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_mostrar_capaActionPerformed
         // TODO add your handling code here:
-        Object sel =(Object) jList1.getSelectedValue();
+        Object sel =(Object) lista_capas.getSelectedValue();
+        Object selectdpi = jComboBox1.getSelectedItem();
         if(arbol_capas.raiz!=null){
             System.out.println(arbol_capas.txt_te());
         }
         if(sel != null){
             String aux = String.valueOf(sel);
             int aux2 = Integer.parseInt(aux);
+            int s_dpi = (int)selectdpi;
             Matriz capa_sel = arbol_capas.buscar(aux2);
             if(capa_sel == null){
-                jt_consola.append("La capa buscada no existe o no se encontro.\n");
+                jt_consola.append("No se selecciono la capa, seleccione capa.\n");
             }else{
                 String d_imagen;
-                d_imagen = capa_sel.imagen();
+                d_imagen = capa_sel.imagen(s_dpi);
                 if(d_imagen.length() > 0){
                     jt_consola.append(String.valueOf(aux2)+"\n");
-                    BufferedImage bimg;
-                    try{
-                        bimg = ImageIO.read(new File(d_imagen));
-                        int ancho = bimg.getWidth();
-                        int alto = bimg.getHeight();
-                        Image image = new ImageIcon(d_imagen).getImage();
-                        ImageIcon icon = new ImageIcon(image.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
-                        JLabel etiqueta = new JLabel(icon);
-                        JScrollPane scp = new JScrollPane(etiqueta);
-                        jPanel1.add(scp);
-                        scp.setBounds(0,0,430,535);
-                        scp.setViewportView(etiqueta);
-                        scp.repaint();
-                    } catch(Exception ex){
-                        System.out.println("NO se logro motrar la imagen");
-                    }
+                    imagen_externo(d_imagen);       
                 }else{
                     jt_consola.append("Ocurrio un error, no hay direccion de imagen");
                 }
@@ -327,9 +349,9 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "SELECCIONE UNA CAPA A MOSTRAR",
                     "ERROR",JOptionPane.ERROR_MESSAGE);   
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_boton_mostrar_capaActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void menu_carga_imagenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_carga_imagenesActionPerformed
         // TODO add your handling code here:
         JFileChooser selector = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
@@ -342,11 +364,52 @@ public class Principal extends javax.swing.JFrame {
                     "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
         }
         leerjson_img(archivo.getAbsolutePath());
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_menu_carga_imagenesActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
+        String d_img = arbol_capas.imagen();
+        jt_consola.append("\n"+d_img);
+        imagen_externo(d_img);
+
     }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void boton_mostrar_imagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_mostrar_imagenActionPerformed
+        // TODO add your handling code here:
+        Object sel =(Object) lista_imagenes.getSelectedValue();
+        Object selectdpi = jComboBox1.getSelectedItem();
+         if(arbol_imagenes.raiz!=null){
+            System.out.println(arbol_imagenes.txt_grafo());
+         }
+         if(sel!=null){
+            String aux = String.valueOf(sel);
+            int aux2 = Integer.parseInt(aux);
+            int s_dpi = (int)selectdpi;
+            NodoAVL resul = arbol_imagenes.buscar(aux2);
+            String dir_img = resul.matriz_unificada.imagen(s_dpi);
+            if(dir_img.length()>0){
+                imagen_externo(dir_img);
+            }else{
+                jt_consola.append(" Ocurrio un error, verifique los metodos");
+            }
+         }else{
+             JOptionPane.showMessageDialog(this, "SELECCIONE UNA IMAGEN A MOSTRAR",
+                    "ERROR",JOptionPane.ERROR_MESSAGE);
+         }
+         
+    }//GEN-LAST:event_boton_mostrar_imagenActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+        arbol_imagenes.imprimir();
+        String d_img = arbol_imagenes.imagen();
+        jt_consola.append("\n"+d_img);
+        imagen_externo(d_img);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,27 +447,23 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton boton_mostar_album;
+    private javax.swing.JButton boton_mostrar_capa;
+    private javax.swing.JButton boton_mostrar_imagen;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
@@ -415,9 +474,37 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JMenu jm_inicio;
     private javax.swing.JTextArea jt_consola;
+    private javax.swing.JList<String> lista_album;
+    private javax.swing.JList<String> lista_capas;
+    private javax.swing.JList<String> lista_imagenes;
+    private javax.swing.JMenuItem menu_carga_album;
+    private javax.swing.JMenu menu_carga_capas;
+    private javax.swing.JMenuItem menu_carga_imagenes;
     // End of variables declaration//GEN-END:variables
 
     //metodos externos
+    public void imagen_externo(String urlimg){
+        try{
+            File file = new File(urlimg);
+            BufferedImage bufferedImage = ImageIO.read(file);
+            ImageIcon imageIcon = new ImageIcon(bufferedImage);
+            JFrame jframe = new JFrame();
+            jframe.setLayout(new FlowLayout());
+            jframe.setSize(600, 800);
+            JLabel jlabel = new JLabel();
+            
+            jlabel.setIcon(imageIcon);
+            jframe.add(jlabel);
+            jframe.setVisible(true);
+            jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } catch (IOException ex) {
+            System.out.println("Ocurrio un error inesperado no se mostro la imagen");
+            jt_consola.append("Ocurrio un error inesperado no se mostro la imagen");
+
+        }
+    
+    }
+    
     public void leerjson_capa(String direccion){
         JSONParser parser = new JSONParser();
         //prueba de la creacion de una matriz borrar despues
@@ -464,7 +551,37 @@ public class Principal extends javax.swing.JFrame {
         
         try(Reader reader = new FileReader(direccion)){
             JSONArray arrayobj = (JSONArray) parser.parse(reader);
-            System.out.println(arrayobj);
+            //System.out.println(arrayobj);
+            if(arrayobj.size()>0){
+                for(int n = 0; n <arrayobj.size();n++){
+                    JSONObject valor = (JSONObject) arrayobj.get(n);
+                    long id = (Long) valor.get("id");
+                    JSONArray valor_capas = (JSONArray) valor.get("capas");
+                    ArbolABB arbol = new ArbolABB();
+                    int capaadd = (int) id + 100;
+                    Matriz union = new Matriz(capaadd);
+                    for(int i = 0; i<valor_capas.size();i++){
+                        long capa = (Long)valor_capas.get(i);
+                        Matriz actual = arbol_capas.buscar((int)capa);
+                        if(actual !=null){
+                           arbol.insertar(actual);
+                           //aqui extraigo las coordenadas y color para unificar las capas
+                           NodoMatriz aux = actual.raiz;
+                           while(aux!=null){
+                               NodoMatriz aux2 = aux;
+                               while(aux2!=null){
+                                   union.insertar_nodo(aux2.x,aux2.y, aux2.color);
+                                   aux2 = aux2.siguiente;
+                               }
+                               aux = aux.abajo;
+                           }
+                           // final del recorrido de la capa
+                        }
+                    }
+                    modelo_img.addElement(id);
+                    arbol_imagenes.insertar((int)id,arbol,union);
+                }
+            }
         }catch (IOException e){
             System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
             jt_consola.append("EL ARCHIVO NO SE PUEDE ABRIR, NO EXISTE \n");
@@ -472,5 +589,16 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
             jt_consola.append("EL ARCHIVO NO ES UN ARCHIVO JSON \n");
         }
+    }
+    
+    private void llenardpi(){
+        modelo_dpi.addElement(10);
+        modelo_dpi.addElement(20);
+        modelo_dpi.addElement(30);
+        modelo_dpi.addElement(40);
+        modelo_dpi.addElement(50);
+        modelo_dpi.addElement(100);
+        modelo_dpi.addElement(150);
+        modelo_dpi.addElement(200);      
     }
 }
