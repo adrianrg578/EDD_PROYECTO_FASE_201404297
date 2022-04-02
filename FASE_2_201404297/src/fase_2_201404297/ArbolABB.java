@@ -31,10 +31,17 @@ public class ArbolABB {
     NodoABB raiz ;
     int nodos ;
     String nodo_c;
+    String pre_;
+    String in_;
+    String post_;
     public ArbolABB(){
         this.raiz = null;
         this.nodos=0;
         this.nodo_c ="";
+        this.pre_="";
+        this.in_ ="";
+        this.post_ = "";
+        
     }
     
     public void insertar(Matriz capa){
@@ -59,13 +66,22 @@ public class ArbolABB {
         return raiz;
     }
     
-    public void pre(NodoABB padre){
+    public String pre(){
+        pre_ = "";
+        String result ="";
+        result = pre(raiz);
+        return result;
+    }
+    
+    private String pre(NodoABB padre){
         if (padre!=null){
             System.out.println("capa no: "+padre.capa.id);
+            pre_ += Integer.toString(padre.capa.id)+", ";
             pre(padre.izquierdo);
             pre(padre.derecho);
         }
         //System.out.println("hay "+ nodos+" nodos en el arbol");
+        return pre_;
     }
     
     public String txt_te(){
@@ -95,26 +111,43 @@ public class ArbolABB {
         }
     }
     
+    public String inorden(){
+        in_ = "";
+        String result ="";
+        result = inorden(raiz);
+        return result;
     
-    public void inorden(NodoABB padre){
+    }
+    
+    private String inorden(NodoABB padre){
         if(padre != null){
             inorden(padre.izquierdo);
             System.out.println(padre.capa.id);
+            in_ += Integer.toString(padre.capa.id)+", ";
             inorden(padre.derecho);
         }
+        return in_;
     }
     
-    public void post(NodoABB padre){
+    public String post(){
+        post_ ="";
+        String result ="";
+        result = post(raiz);
+        return result;
+    }
+    
+    private String post(NodoABB padre){
         if(padre!=null){
             post(padre.izquierdo);
             post(padre.derecho);
             System.out.println(padre.capa.id);
+            post_ += Integer.toString(padre.capa.id)+", ";
         }
-        
+        return post_;
     }
     public void imprimir(){
         //pre(raiz);
-        inorden(raiz);
+        //inorden(raiz);
         //post(raiz);
     }
     
@@ -187,5 +220,20 @@ public class ArbolABB {
         archivotxt(txt_te());
         String d_imagen = archivopng();
         return d_imagen;
+    }
+    
+    public int profundidad(){
+        int result = -1;
+        result = profundidad(raiz);
+        return result;
+    }
+    
+    private int profundidad(NodoABB praiz){
+        if(praiz== null){
+            return 0;
+        }
+        int niz = profundidad(praiz.izquierdo);
+        int nde = profundidad(praiz.derecho);
+        return(niz > nde) ? (niz+1):(nde+1);
     }
 }
