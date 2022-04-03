@@ -42,6 +42,7 @@ public class Principal extends javax.swing.JFrame {
     DefaultListModel modelo_album = new DefaultListModel();
     DefaultComboBoxModel modelo_dpi = new DefaultComboBoxModel();
     ListaCircularDE lista_c_album = new ListaCircularDE();
+    Lista_simple top_5 = new Lista_simple();
     /**
      * Creates new form Principal
      */
@@ -81,6 +82,11 @@ public class Principal extends javax.swing.JFrame {
         label_primera = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jt_reporte = new javax.swing.JTextArea();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jt_capa = new javax.swing.JTextField();
+        boton_recorrido_limitado = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jm_inicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -96,6 +102,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         m_top_imagen = new javax.swing.JMenuItem();
         mp_arbol_capa = new javax.swing.JMenuItem();
+        menu_capas_hojas = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -181,6 +188,22 @@ public class Principal extends javax.swing.JFrame {
         jt_reporte.setRows(5);
         jScrollPane5.setViewportView(jt_reporte);
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PreOrden", "InOrden", "PostOrden"}));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("Elija recorrido  a usar");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setText("Escriba la cantidad  de capas a usar");
+
+        boton_recorrido_limitado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boton_recorrido_limitado.setText("Mostrar Arbol");
+        boton_recorrido_limitado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_recorrido_limitadoActionPerformed(evt);
+            }
+        });
+
         jm_inicio.setText("Inicio");
 
         jMenuItem1.setText("Cerrar Sesion");
@@ -260,6 +283,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu4.add(mp_arbol_capa);
 
+        menu_capas_hojas.setText("Capas que son hojas");
+        menu_capas_hojas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_capas_hojasActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menu_capas_hojas);
+
         jMenuBar1.add(jMenu4);
 
         jMenu2.setText("Mas");
@@ -276,7 +307,6 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boton_mostar_album)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -287,61 +317,83 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(85, 85, 85)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton_eliminar_imagen)
-                                .addGap(52, 52, 52)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(label_primera))
-                                    .addComponent(jLabel2)))
-                            .addComponent(boton_mostrar_imagen)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel4))))
+                                        .addComponent(boton_eliminar_imagen))
+                                    .addComponent(boton_mostrar_imagen)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(52, 52, 52)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jt_capa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(boton_recorrido_limitado, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(label_primera))))))
+                    .addComponent(boton_mostar_album))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel4))
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(boton_mostrar_capa))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(boton_mostrar_capa))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addComponent(label_primera)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton_eliminar_imagen))
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(boton_eliminar_imagen)))
                         .addGap(18, 18, 18)
                         .addComponent(boton_mostrar_imagen)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8)
+                                .addGap(8, 8, 8)
+                                .addComponent(jt_capa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(boton_mostar_album)
-                .addGap(43, 43, 43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(boton_recorrido_limitado)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -513,8 +565,30 @@ public class Principal extends javax.swing.JFrame {
 
     private void m_top_imagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_top_imagenActionPerformed
         // TODO add your handling code here:
-        
+        llenarlista();
+        jt_reporte.setText("");
+        jt_reporte.append(top_5.imprimir());
     }//GEN-LAST:event_m_top_imagenActionPerformed
+
+    private void menu_capas_hojasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_capas_hojasActionPerformed
+        // TODO add your handling code here:
+        jt_reporte.setText("");
+        jt_reporte.append("Las Capas que son hojas son: "+arbol_capas.hoja() + "\n");
+    }//GEN-LAST:event_menu_capas_hojasActionPerformed
+
+    private void boton_recorrido_limitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_recorrido_limitadoActionPerformed
+        // TODO add your handling code here:
+       /* Object selec = jComboBox2.getSelectedItem();
+        String s_sele = (String)selec;
+        int cantidad_capa = Integer.parseInt(jt_capa.getText());
+        if(s_sele.equalsIgnoreCase("PreOrden")){
+            //PreOrden
+        }else if(s_sele.equalsIgnoreCase("InOrden")){
+            //InOrden
+        }else{
+            //postOrden
+        }*/
+    }//GEN-LAST:event_boton_recorrido_limitadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -556,13 +630,17 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton boton_mostar_album;
     private javax.swing.JButton boton_mostrar_capa;
     private javax.swing.JButton boton_mostrar_imagen;
+    private javax.swing.JButton boton_recorrido_limitado;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
@@ -579,6 +657,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JMenu jm_inicio;
+    private javax.swing.JTextField jt_capa;
     private javax.swing.JTextArea jt_consola;
     private javax.swing.JTextArea jt_reporte;
     private javax.swing.JLabel label_primera;
@@ -586,6 +665,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JList<String> lista_capas;
     private javax.swing.JList<String> lista_imagenes;
     private javax.swing.JMenuItem m_top_imagen;
+    private javax.swing.JMenuItem menu_capas_hojas;
     private javax.swing.JMenuItem menu_carga_album;
     private javax.swing.JMenu menu_carga_capas;
     private javax.swing.JMenuItem menu_carga_imagenes;
@@ -717,14 +797,14 @@ public class Principal extends javax.swing.JFrame {
             JSONArray arrayobj = (JSONArray) parser.parse(reader);
             
             if(arrayobj.size()>0){
-                for(int n = 1; n<=arrayobj.size();n++){
+                for(int n = 0; n<arrayobj.size();n++){
                     JSONObject valor = (JSONObject)arrayobj.get(n);
                     String nombre_a = (String)valor.get("nombre_album");
                     JSONArray valor_img = (JSONArray) valor.get("imgs");
                     Lista_simple lista = new Lista_simple();
                     for(int i = 0; i<valor_img.size();i++){
                         long img = (Long)valor_img.get(i);
-                        lista.insertar((int)img);
+                        lista.insertar((int)img,n);
                     }
                     modelo_album.addElement(n);
                     lista_c_album.insertar(n, nombre_a, lista);
@@ -749,4 +829,21 @@ public class Principal extends javax.swing.JFrame {
         modelo_dpi.addElement(150);
         modelo_dpi.addElement(200);      
     }
+    
+    public void llenarlista(){
+        NodoAVL aux = arbol_imagenes.raiz;
+        llenarlista(aux);
+        top_5.ordenada();    
+    }
+    
+    public void llenarlista(NodoAVL padre){
+        if(padre!= null){
+            llenarlista(padre.izquierdo);
+            //System.out.println("VALOR: "+padre.valor);
+            top_5.insertar(padre.valor,padre.arbol_c.nodos);
+            llenarlista(padre.derecho);
+        }  
+    }
+    
+    
 }

@@ -135,8 +135,8 @@ class Nodo_simple{
     int id;
     int imagen;
     Nodo_simple siguiente;
-    public Nodo_simple(int imagen){
-    this.id = 0;
+    public Nodo_simple(int id,int imagen){
+    this.id = id;
     this.imagen=imagen;
     }
 }
@@ -145,14 +145,16 @@ class Lista_simple{
     Nodo_simple inicio;
     Nodo_simple fin;
     int tamanio;
+    String top ;
     public Lista_simple(){
         this.inicio=null;
         this.fin = null;
         this.tamanio = 0;
+        this.top = "";
     }
     
-    public void insertar(int imagen){
-        Nodo_simple nuevo = new Nodo_simple(imagen);
+    public void insertar(int id,int imagen){
+        Nodo_simple nuevo = new Nodo_simple(id,imagen);
         if(inicio==null){
             inicio = nuevo;
             fin = nuevo;
@@ -179,6 +181,73 @@ class Lista_simple{
          }
         }
         return resultado;
+    }
+    
+    public Nodo_simple paritionLast (Nodo_simple start, Nodo_simple end){
+        if(start == end || start ==null|| end==null){
+            return start;
+        }
+        Nodo_simple pivot_prev =start;
+        Nodo_simple curr = start;
+        int pivot = end.imagen;
+        int tid = end.id;
+        
+        while (start != end) {
+            if (start.imagen < pivot) {
+                // keep tracks of last modified item
+                pivot_prev = curr;
+                int temp = curr.imagen;
+                int temp2 = curr.id;
+                curr.imagen = start.imagen;
+                curr.id = start.id;
+                start.imagen = temp;
+                start.id=temp2;
+                curr = curr.siguiente;
+            }
+            start = start.siguiente;
+        }
+        int temp = curr.imagen;
+        int temp2 = curr.id;
+        curr.imagen = pivot;
+        curr.id =tid;
+        end.imagen = temp;
+        end.id=temp2;
+        return pivot_prev;
+    }
+    
+    public void sort(Nodo_simple start, Nodo_simple end){
+        if(start == null || start == end || start == end.siguiente){
+        return;
+        }
+        
+        Nodo_simple pivot_prev = paritionLast(start,end);
+        sort(start, pivot_prev);
+        
+        if(pivot_prev!=null && pivot_prev == start){
+            sort(pivot_prev.siguiente,end);
+        }else if(pivot_prev !=null && pivot_prev.siguiente!=null){
+            sort(pivot_prev.siguiente.siguiente, end);
+        }
+    }
+    
+    public void ordenada(){
+        sort(inicio,fin);
+    }
+    public String imprimir(){
+        top = "";
+        int contador =0;
+        int tp = 5;
+        Nodo_simple aux = inicio;
+        while(aux!=null){
+            if(contador == 5){
+                break;
+            }
+            top += tp+" lugar: "+"imagen No."+aux.id+" contiene "+aux.imagen+" capas \n";
+            aux = aux.siguiente;
+            contador++;
+            tp--;
+        }
+        return top;
     }
    
 }

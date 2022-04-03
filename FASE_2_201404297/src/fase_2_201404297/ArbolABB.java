@@ -34,6 +34,7 @@ public class ArbolABB {
     String pre_;
     String in_;
     String post_;
+    String hoja;
     public ArbolABB(){
         this.raiz = null;
         this.nodos=0;
@@ -41,6 +42,7 @@ public class ArbolABB {
         this.pre_="";
         this.in_ ="";
         this.post_ = "";
+        this.hoja="";
         
     }
     
@@ -236,4 +238,24 @@ public class ArbolABB {
         int nde = profundidad(praiz.derecho);
         return(niz > nde) ? (niz+1):(nde+1);
     }
+    
+    public String hoja(){
+        hoja ="";
+        String result = hoja(raiz);
+        return result;
+    }
+ 
+    private String hoja(NodoABB padre){
+        if(padre!=null){
+            if(padre.izquierdo== null && padre.derecho==null){
+                hoja = hoja +padre.capa.id +", ";
+            }
+            hoja(padre.izquierdo);
+            hoja(padre.derecho);
+
+        }
+    return hoja;
+    }
+    
+    
 }
