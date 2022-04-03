@@ -231,7 +231,7 @@ public class Matriz {
         return result;
     }
     private void archivotxt(String codigo_txt){
-        String n_capa = "capa_"+id+".txt";
+        String n_capa = "C:\\Users\\adria\\Desktop\\recursos\\capa_"+id+".txt";
         try {
             File f;
             f = new File(n_capa);
@@ -249,7 +249,7 @@ public class Matriz {
         }
     }
     private String archivopng(){
-        String ruta_a ="capa_"+id+".txt";
+        String ruta_a ="C:\\Users\\adria\\Desktop\\recursos\\capa_"+id+".txt";
         String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
         String fileInputPath =ruta_a;
         String fileOutputPath =ruta_a.replace(".txt", ".png");

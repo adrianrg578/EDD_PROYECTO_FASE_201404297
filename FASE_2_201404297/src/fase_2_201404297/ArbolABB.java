@@ -176,7 +176,7 @@ public class ArbolABB {
     }
     
     private void archivotxt(String codigo_txt){
-        String n_capa = "arbolABB.txt";
+        String n_capa = "C:\\Users\\adria\\Desktop\\recursos\\arbolABB.txt";
         try {
             File f;
             f = new File(n_capa);
@@ -195,7 +195,7 @@ public class ArbolABB {
     }
     
     private String archivopng(){
-        String ruta_a ="arbolABB.txt";
+        String ruta_a ="C:\\Users\\adria\\Desktop\\recursos\\arbolABB.txt";
         String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
         String fileInputPath =ruta_a;
         String fileOutputPath =ruta_a.replace(".txt", ".png");
