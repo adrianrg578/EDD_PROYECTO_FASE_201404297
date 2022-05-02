@@ -32,13 +32,14 @@ class NodoHash{
 public class TablaHash {
     NodoHash[] tabla_hash;
     int elementos;
-    int factor_carga;
+    float factor_carga;
     int tamanio;
     
     public TablaHash(int valor){
         this.elementos=0;
         this.factor_carga=0;
         this.tamanio=valor;
+        this.tabla_hash = new NodoHash[valor];
         
         for(int i = 0;i>valor;i++){
             tabla_hash[i] = null;
@@ -52,14 +53,14 @@ public class TablaHash {
                 telefono,direccion);
         tabla_hash[posicion]=nuevo;
         elementos++;
-        factor_carga = elementos/tamanio;
+        factor_carga = (float)elementos/tamanio;
         
         if(factor_carga > 0.75){
-            //rehashing();
+            rehashing();
         }
     }
     
-    public int funcion_hash(long indice){
+    private int funcion_hash(long indice){
         long posicion;
         int resultado = 0;
         posicion = indice%(tamanio-1);
@@ -85,7 +86,7 @@ public class TablaHash {
         return resultado;
     }
     
-    public void rehashing(){
+    private void rehashing(){
         int proximo = next_primo(tamanio);
         int factor = 0;
         NodoHash[] temporal = new NodoHash[proximo];
@@ -110,7 +111,7 @@ public class TablaHash {
         tabla_hash = temporal;
     }
     
-    public int next_primo(int tamanio){
+    private int next_primo(int tamanio){
         int sig = tamanio+1;
         int resultado = 0;
         boolean primo = false;
@@ -127,7 +128,7 @@ public class TablaHash {
         return resultado;
     }
     
-    public boolean esPrimo(int numero){
+    private boolean esPrimo(int numero){
         if(numero==0 || numero == 1 || numero==4){
             return false;
         }
@@ -142,7 +143,7 @@ public class TablaHash {
   public void imprimir(){
       for(int i = 0; i<tabla_hash.length;i++){
           if(tabla_hash[i]!=null){
-              System.out.println("indice: "+ i +"DPI: "+tabla_hash[i].dpi);
+              System.out.println("indice: "+ i +"  DPI: "+tabla_hash[i].dpi);
           }else{
               System.out.println("indice: "+ i +"DPI: vacio" );
           }
