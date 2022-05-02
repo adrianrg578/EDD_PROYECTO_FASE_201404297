@@ -118,7 +118,7 @@ public class ArbolB {
             raiz = new RamaB();
             raiz.insertar(nodo);
         }else{
-        //    NodoB obj = insertar_en_rama(nodo,raiz);
+            NodoB obj = insertar_en_rama(nodo,raiz);
         }
     
     }
@@ -222,6 +222,37 @@ public class ArbolB {
         nuevo2.derecha = rderecha;
         nuevo2.izquierda = rizquierda;
         return nuevo2;
+    }
+    
+    public NodoB buscar(String usuario){
+        String aux = usuario;
+        NodoB resultado = buscar(raiz,usuario);
+        return resultado;
+    
+    }
+    
+    private NodoB buscar(RamaB padre,String usuario){
+        NodoB aux = null;
+        if(padre!=null){
+            NodoB temp = padre.primero;
+            while(temp != null){
+                if(temp.user.equals(usuario)){
+                    aux = temp;
+                    return aux;
+                }else{
+                    if(temp.izquierda!=null){
+                        aux = buscar(temp.izquierda,usuario);
+                    }else{
+                        if (temp.derecha!=null){
+                            aux = buscar(temp.derecha,usuario);
+                        }else{
+                            temp = temp.siguiente;
+                        }
+                    }
+                }
+            }
+        }
+        return aux;
     }
     
 }
