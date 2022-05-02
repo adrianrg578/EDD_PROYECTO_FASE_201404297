@@ -4,6 +4,11 @@
  */
 package fase_3_201404297;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 /**
  *
  * @author adria
@@ -71,13 +76,13 @@ public class TablaHash {
                 while(vacio==false){
                     posicion = ((indice % 7) +1)*contador;
                     int aux = Math.toIntExact(posicion);
-                    if(tabla_hash[aux]!=null){
-                        contador++;
-                        vacio = false;
-                    }else{
-                        resultado = Math.toIntExact(posicion);
-                        vacio = true;
-                    }
+                        if(tabla_hash[aux]!=null){
+                            contador++;
+                            vacio = false;
+                        }else{
+                            resultado = Math.toIntExact(posicion);
+                            vacio = true;
+                        }
                 }
             }else{
                 resultado = Math.toIntExact(posicion);
@@ -140,13 +145,85 @@ public class TablaHash {
         return true;
     }
        
-  public void imprimir(){
-      for(int i = 0; i<tabla_hash.length;i++){
-          if(tabla_hash[i]!=null){
-              System.out.println("indice: "+ i +"  DPI: "+tabla_hash[i].dpi);
-          }else{
-              System.out.println("indice: "+ i +"DPI: vacio" );
-          }
-      }
-  }
+    public void imprimir(){
+        for(int i = 0; i<tabla_hash.length;i++){
+            if(tabla_hash[i]!=null){
+                System.out.println("indice: "+ i +"  DPI: "+tabla_hash[i].dpi);
+            }else{
+                System.out.println("indice: "+ i +"DPI: vacio" );
+            }
+        }
+    }
+    
+    private String generartablatxt(){
+        String nodo ="";
+        String grafotxt = "digraph Tabla_Hash { \n node [shape=plaintext]; \n";
+        String a = "struct1 [ label=<<TABLE><tr> \n <td>Indice</td> \n <td>valor</td>\n </tr> \n" ;
+        String fn = "</TABLE>>]; \n } ";
+        String b = "<tr> \n";
+        String c = "</tr> \n";
+        for(int i = 0; i<tabla_hash.length;i++){
+            if(tabla_hash[i]!=null){
+                //System.out.println("indice: "+ i +"  DPI: "+tabla_hash[i].dpi);
+                nodo+=b+"<td>"+i+"</td>"+"<td>"+tabla_hash[i].dpi+"\n"+"<br/>"+tabla_hash[i].nombre+"</td> \n"+c;
+            }else{
+                //System.out.println("indice: "+ i +"  DPI: vacio" );
+                nodo+=b+"<td>"+i+"</td>"+"<td>Vacio</td> \n"+c;
+            }
+        }
+        String result = "";
+        result +=grafotxt+a+nodo+fn;
+        
+        return result;
+    }
+    
+    private void archivotxt(String codigo_txt){
+        String tabla = "C:\\Users\\adria\\Desktop\\recursos_f3\\TablaHash.txt";
+        try {
+            File f;
+            f = new File(tabla);
+            if(!f.exists()){
+                f.createNewFile();
+            }
+            FileWriter w = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(w);
+            PrintWriter wr = new PrintWriter(bw);
+            wr.write(codigo_txt);
+            wr.close();
+            bw.close();
+        } catch (Exception e) {
+        System.out.println("NO SE PUDO CREAR EL ARCHIVO");
+        }
+    }
+    
+    private String archivopng(){
+        String ruta_a ="C:\\Users\\adria\\Desktop\\recursos_f3\\TablaHash.txt";
+        String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+        String fileInputPath =ruta_a;
+        String fileOutputPath =ruta_a.replace(".txt", ".png");
+        String tParam = "-Tjpg";
+        String tOParam = "-o";
+        try {  
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+                  
+            Runtime rt = Runtime.getRuntime();
+      
+            rt.exec( cmd );
+      
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return fileOutputPath;
+    }
+    
+     public String imagen(){
+        archivotxt(generartablatxt());
+        String d_imagen = archivopng();
+        return d_imagen;
+    }
 }
