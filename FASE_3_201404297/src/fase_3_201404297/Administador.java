@@ -4,12 +4,23 @@
  */
 package fase_3_201404297;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+
 /**
  *
  * @author adria
  */
 public class Administador extends javax.swing.JFrame {
-
+    ArbolB users = new ArbolB();
+    TablaHash mensajeros = new TablaHash(37);
     /**
      * Creates new form Administador
      */
@@ -74,12 +85,22 @@ public class Administador extends javax.swing.JFrame {
         jMenu2.add(jMenu_carga_lugar);
 
         jMenu_carga_mensajero.setText("Mensajeros");
+        jMenu_carga_mensajero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_carga_mensajeroActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenu_carga_mensajero);
 
         jMenu_carga_ruta.setText("Rutas");
         jMenu2.add(jMenu_carga_ruta);
 
         jMenu_carga_usuarios.setText("Usuarios");
+        jMenu_carga_usuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_carga_usuariosActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenu_carga_usuarios);
 
         jMenuBar1.add(jMenu2);
@@ -128,6 +149,45 @@ public class Administador extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenu_carga_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_carga_usuariosActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        carga_user_json(archivo.getAbsolutePath());
+        
+        NodoB prueba = users.buscar("Vanny07");
+        if(prueba == null){
+            System.out.println("el metodo no funciono");
+        }else{
+            System.out.println("nombre: " + prueba.nombre);
+        }
+    }//GEN-LAST:event_jMenu_carga_usuariosActionPerformed
+
+    private void jMenu_carga_mensajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_carga_mensajeroActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        carga_mensajeros(archivo.getAbsolutePath());
+        System.out.println(mensajeros.elementos + " factor cargar: "+mensajeros.factor_carga);
+        mensajeros.imprimir();
+    }//GEN-LAST:event_jMenu_carga_mensajeroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,4 +245,64 @@ public class Administador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jText_consola;
     // End of variables declaration//GEN-END:variables
+    private void carga_user_json(String direccion){
+        JSONParser parser = new JSONParser();
+        try(Reader reader = new FileReader(direccion)){
+            JSONArray arrayobj = (JSONArray) parser.parse(reader);
+            //System.out.println(arrayobj);
+            if(arrayobj.size()>0){
+                for(int n = 0; n<arrayobj.size();n++){
+                    JSONObject valor = (JSONObject)arrayobj.get(n);
+                    long dpi = Long.parseLong((String) valor.get("dpi"));
+                    String nombre = (String) valor.get("nombre_cliente");
+                    String usuario = (String) valor.get("usuario");
+                    String pass = (String) valor.get("password");
+                    String correo = (String) valor.get("correo");
+                    int telefono = Integer.parseInt((String) valor.get("telefono"));
+                    String dir_user = (String) valor.get("direccion");
+                    short id_municipio = Short.parseShort((String) valor.get("id_municipio"));
+                    
+                    //System.out.println("dpi: "+dpi+" nombre: "+nombre);
+                    users.insertar(dpi,nombre,pass,usuario,correo,telefono,dir_user,id_municipio);
+                }
+            }
+            
+        }catch (IOException e) {
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+        } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+        }
+    }
+
+    private void carga_mensajeros(String direccion){
+        JSONParser parser = new JSONParser();
+        
+        try(Reader reader = new FileReader(direccion)){
+            JSONArray arrayobj = (JSONArray) parser.parse(reader);
+            
+            if(arrayobj.size()>0){
+                for (int n =0; n <arrayobj.size();n++){
+                    JSONObject valor = (JSONObject) arrayobj.get(n);
+                    long dpi = Long.parseLong((String)valor.get("dpi"));
+                    String nombre= (String)valor.get("nombres");
+                    String apellido = (String)valor.get("apellidos");
+                    char licencia = valor.get("tipo_licencia").toString().charAt(0);
+                    String genero = (String) valor.get("genero");
+                    int telefono = Integer.parseInt((String)valor.get("telefono"));
+                    String dir_mensajero = (String) valor.get("direccion");
+                    
+                    /*System.out.println(dpi +"\n"+nombre+"\n"+apellido+"\n"+
+                            licencia+"\n"+genero+"\n"+telefono+"\n"+dir_mensajero);*/
+                    mensajeros.insertar(dpi, nombre, apellido, licencia, genero, telefono, dir_mensajero);
+                }
+            }
+        
+        }catch (IOException e) {
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+            
+        } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+
+        }
+    }
 }
