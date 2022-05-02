@@ -4,27 +4,36 @@
  */
 package fase_3_201404297;
 
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author adria
  */
-public class Administador extends javax.swing.JFrame {
+public class Administrador extends javax.swing.JFrame {
     ArbolB users = new ArbolB();
     TablaHash mensajeros = new TablaHash(37);
+
     /**
      * Creates new form Administador
      */
-    public Administador() {
+    public Administrador() {
         initComponents();
     }
 
@@ -72,6 +81,11 @@ public class Administador extends javax.swing.JFrame {
         jMenu1.setText("Archivo");
 
         jMenu_cerrar_sesion.setText("Cerrar Sesion");
+        jMenu_cerrar_sesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_cerrar_sesionActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenu_cerrar_sesion);
 
         jMenu_iniciar_sesion.setText("Iniciar Sesion");
@@ -82,6 +96,11 @@ public class Administador extends javax.swing.JFrame {
         jMenu2.setText("Carga");
 
         jMenu_carga_lugar.setText("Lugares");
+        jMenu_carga_lugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_carga_lugarActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenu_carga_lugar);
 
         jMenu_carga_mensajero.setText("Mensajeros");
@@ -93,6 +112,11 @@ public class Administador extends javax.swing.JFrame {
         jMenu2.add(jMenu_carga_mensajero);
 
         jMenu_carga_ruta.setText("Rutas");
+        jMenu_carga_ruta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_carga_rutaActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenu_carga_ruta);
 
         jMenu_carga_usuarios.setText("Usuarios");
@@ -120,6 +144,11 @@ public class Administador extends javax.swing.JFrame {
         jMenu3.add(jMenu_nodo_red);
 
         jMenu_tabla_dispersion.setText("Tabla de dispersion (Hash)");
+        jMenu_tabla_dispersion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_tabla_dispersionActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenu_tabla_dispersion);
 
         jMenuBar1.add(jMenu3);
@@ -168,7 +197,7 @@ public class Administador extends javax.swing.JFrame {
         if(prueba == null){
             System.out.println("el metodo no funciono");
         }else{
-            System.out.println("nombre: " + prueba.nombre);
+            System.out.println("nombre: " + prueba.nombre + " pass: "+prueba.contrasenia);
         }
     }//GEN-LAST:event_jMenu_carga_usuariosActionPerformed
 
@@ -189,6 +218,50 @@ public class Administador extends javax.swing.JFrame {
         mensajeros.imprimir();
     }//GEN-LAST:event_jMenu_carga_mensajeroActionPerformed
 
+    private void jMenu_cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_cerrar_sesionActionPerformed
+        // TODO add your handling code here:
+        Ingreso nuevo = new Ingreso(users);
+        nuevo.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenu_cerrar_sesionActionPerformed
+
+    private void jMenu_tabla_dispersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_tabla_dispersionActionPerformed
+        // TODO add your handling code here:
+        String d_img = mensajeros.imagen();
+        imagen_externo(d_img);
+    }//GEN-LAST:event_jMenu_tabla_dispersionActionPerformed
+
+    private void jMenu_carga_lugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_carga_lugarActionPerformed
+        // TODO add your handling code here:
+        //aqui va la carga de lugares
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        carga_lugares(archivo.getAbsolutePath());
+    }//GEN-LAST:event_jMenu_carga_lugarActionPerformed
+
+    private void jMenu_carga_rutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_carga_rutaActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        carga_ruta(archivo.getAbsolutePath());
+    }//GEN-LAST:event_jMenu_carga_rutaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -206,20 +279,21 @@ public class Administador extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Administador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Administador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Administador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Administador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Administador().setVisible(true);
+                new Administrador().setVisible(true);
             }
         });
     }
@@ -245,6 +319,29 @@ public class Administador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jText_consola;
     // End of variables declaration//GEN-END:variables
+    //metodos de lectura e muestra de imagenes
+    
+    public void imagen_externo(String urlimg){
+        try{
+            File file = new File(urlimg);
+            BufferedImage bufferedImage = ImageIO.read(file);
+            ImageIcon imageIcon = new ImageIcon(bufferedImage);
+            JFrame jframe = new JFrame();
+            jframe.setLayout(new FlowLayout());
+            jframe.setSize(600, 800);
+            JLabel jlabel = new JLabel();
+            
+            jlabel.setIcon(imageIcon);
+            jframe.add(jlabel);
+            jframe.setVisible(true);
+            jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } catch (IOException ex) {
+            System.out.println("Ocurrio un error inesperado no se mostro la imagen");
+
+        }
+    
+    }
+    
     private void carga_user_json(String direccion){
         JSONParser parser = new JSONParser();
         try(Reader reader = new FileReader(direccion)){
@@ -257,13 +354,14 @@ public class Administador extends javax.swing.JFrame {
                     String nombre = (String) valor.get("nombre_cliente");
                     String usuario = (String) valor.get("usuario");
                     String pass = (String) valor.get("password");
+                    String hashpass = BCrypt.hashpw(pass,BCrypt.gensalt());
                     String correo = (String) valor.get("correo");
                     int telefono = Integer.parseInt((String) valor.get("telefono"));
                     String dir_user = (String) valor.get("direccion");
                     short id_municipio = Short.parseShort((String) valor.get("id_municipio"));
                     
                     //System.out.println("dpi: "+dpi+" nombre: "+nombre);
-                    users.insertar(dpi,nombre,pass,usuario,correo,telefono,dir_user,id_municipio);
+                    users.insertar(dpi,nombre,hashpass,usuario,correo,telefono,dir_user,id_municipio);
                 }
             }
             
@@ -297,6 +395,63 @@ public class Administador extends javax.swing.JFrame {
                 }
             }
         
+        }catch (IOException e) {
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+            
+        } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+
+        }
+    }
+    
+    private void carga_lugares(String direccion){
+        JSONParser parser = new JSONParser();
+        
+        try(Reader reader = new FileReader(direccion)){
+            JSONObject objeto = (JSONObject)parser.parse(reader);
+            
+            if(objeto.size()>0){
+                for(Iterator iterator = objeto.keySet().iterator();iterator.hasNext();){
+                    String key = (String) iterator.next();
+                    JSONArray valor = (JSONArray)objeto.get(key);
+                    for(int n = 0;n < valor.size();n++){
+                        JSONObject valor_interno = (JSONObject)valor.get(n);
+                        int id = Math.toIntExact((Long)valor_interno.get("id"));
+                        String depto = (String) valor_interno.get("departamento");
+                        String nombre = (String) valor_interno.get("nombre");
+                        String sucursal = (String) valor_interno.get("sn_sucursal");
+                        System.out.println(id+"\n"+depto+"\n"+nombre+"\n"+sucursal+"\n");
+                    }
+                }
+            }
+        }catch (IOException e) {
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+            
+        } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+
+        }
+    }
+    
+    private void carga_ruta(String direccion){
+        JSONParser parser = new JSONParser();
+        
+        try(Reader reader=new FileReader(direccion)){
+            JSONObject objeto = (JSONObject)parser.parse(reader);
+            
+            if(objeto.size()>0){
+                for(Iterator iterator = objeto.keySet().iterator();iterator.hasNext();){
+                    String key = (String) iterator.next();
+                    JSONArray valor = (JSONArray)objeto.get(key);
+                    for(int n = 0;n < valor.size();n++){
+                        JSONObject valor_interno = (JSONObject)valor.get(n);
+                        int inicio = Math.toIntExact((Long)valor_interno.get("inicio"));
+                        int fin = Math.toIntExact((Long)valor_interno.get("final"));
+                        int peso = Math.toIntExact((Long)valor_interno.get("peso"));
+                        System.out.println(inicio+"\n"+fin+"\n"+peso+"\n");
+                    }
+                }
+            }
         }catch (IOException e) {
             System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
             

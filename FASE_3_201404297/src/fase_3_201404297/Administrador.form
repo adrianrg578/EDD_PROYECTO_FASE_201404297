@@ -18,6 +18,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cerrar Sesion"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu_cerrar_sesionActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenu_iniciar_sesion">
               <Properties>
@@ -35,6 +38,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Lugares"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu_carga_lugarActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenu_carga_mensajero">
               <Properties>
@@ -48,6 +54,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Rutas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu_carga_rutaActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenu_carga_usuarios">
               <Properties>
@@ -88,6 +97,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Tabla de dispersion (Hash)"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu_tabla_dispersionActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
