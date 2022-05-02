@@ -4,17 +4,21 @@
  */
 package fase_3_201404297;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 /**
  *
  * @author adria
  */
 public class Ingreso extends javax.swing.JFrame {
-
+    ArbolB lista_usuarios = new ArbolB();
+    
     /**
      * Creates new form Ingreso
      */
-    public Ingreso() {
+    public Ingreso(ArbolB lista_users) {
         initComponents();
+        this.lista_usuarios= lista_users;
     }
 
     /**
@@ -47,6 +51,11 @@ public class Ingreso extends javax.swing.JFrame {
         });
 
         jButton_ingresar.setText("Ingresar");
+        jButton_ingresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ingresarActionPerformed(evt);
+            }
+        });
 
         jButton_registrar.setText("Registrarse");
 
@@ -97,6 +106,35 @@ public class Ingreso extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField_passActionPerformed
 
+    private void jButton_ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ingresarActionPerformed
+        // TODO add your handling code here:
+        String user = jText_user.getText();
+        String pass = String.valueOf(jPasswordField_pass.getPassword());
+        
+        if(user.equals("admin") && pass.equals("EDD2022")){
+            Administrador principal = new Administrador();
+            principal.setVisible(true);
+            this.dispose();
+            System.out.println(user);
+            System.out.println(pass);
+        }else{
+            if(lista_usuarios==null){
+                javax.swing.JOptionPane.showMessageDialog(null, "No Existen usuarios en la aplicacion");
+            }else{
+                String temp = lista_usuarios.buscar(user).user;
+                if(temp !=null){
+                    boolean match_pass = BCrypt.checkpw(pass,lista_usuarios.buscar(user).contrasenia);
+                    if(match_pass){
+                        Usuario nuevo = new Usuario(lista_usuarios.buscar(user));
+                        nuevo.setVisible(true);
+                        this.dispose();
+                    }
+                }
+                 
+            }
+        }
+    }//GEN-LAST:event_jButton_ingresarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -127,7 +165,7 @@ public class Ingreso extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Ingreso().setVisible(true);
+                new Ingreso(null).setVisible(true);
             }
         });
     }

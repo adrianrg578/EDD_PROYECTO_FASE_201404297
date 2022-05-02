@@ -15,6 +15,8 @@ public class FASE_3_201404297 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Ingreso log = new Ingreso(null);
+        log.setVisible(true);
     }
     
 }

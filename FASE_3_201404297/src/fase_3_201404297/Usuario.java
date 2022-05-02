@@ -9,12 +9,14 @@ package fase_3_201404297;
  * @author adria
  */
 public class Usuario extends javax.swing.JFrame {
-
+    NodoB actual;
     /**
      * Creates new form Usuario
      */
-    public Usuario() {
+    public Usuario(NodoB activo) {
         initComponents();
+        this.actual=activo;
+        jlabel_activo.setText("Usuario Activo: "+actual.user);
     }
 
     /**
@@ -38,6 +40,7 @@ public class Usuario extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea_consola = new javax.swing.JTextArea();
+        jlabel_activo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu_cerrar_sesion = new javax.swing.JMenuItem();
@@ -111,13 +114,16 @@ public class Usuario extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jlabel_activo))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jlabel_activo)
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel5))
@@ -176,7 +182,7 @@ public class Usuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Usuario().setVisible(true);
+                new Usuario(null).setVisible(true);
             }
         });
     }
@@ -200,5 +206,6 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenu_inicio_sesion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea_consola;
+    private javax.swing.JLabel jlabel_activo;
     // End of variables declaration//GEN-END:variables
 }
