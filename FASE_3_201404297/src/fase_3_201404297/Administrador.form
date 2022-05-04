@@ -82,11 +82,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Grafo de Rutas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu_grafo_rutasActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenu_lista_adyacencia">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Lista de Adyacencia"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu_lista_adyacenciaActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenu_nodo_red">
               <Properties>

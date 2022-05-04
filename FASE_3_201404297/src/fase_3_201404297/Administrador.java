@@ -29,7 +29,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class Administrador extends javax.swing.JFrame {
     ArbolB users = new ArbolB();
     TablaHash mensajeros = new TablaHash(37);
-
+    Grafo lugares = new Grafo();
     /**
      * Creates new form Administador
      */
@@ -135,9 +135,19 @@ public class Administrador extends javax.swing.JFrame {
         jMenu3.add(jMenu_blockchain);
 
         jMenu_grafo_rutas.setText("Grafo de Rutas");
+        jMenu_grafo_rutas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_grafo_rutasActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenu_grafo_rutas);
 
         jMenu_lista_adyacencia.setText("Lista de Adyacencia");
+        jMenu_lista_adyacencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_lista_adyacenciaActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenu_lista_adyacencia);
 
         jMenu_nodo_red.setText("Nodos de la red");
@@ -261,6 +271,19 @@ public class Administrador extends javax.swing.JFrame {
         }
         carga_ruta(archivo.getAbsolutePath());
     }//GEN-LAST:event_jMenu_carga_rutaActionPerformed
+
+    private void jMenu_lista_adyacenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_lista_adyacenciaActionPerformed
+        // TODO add your handling code here:
+        String dir_ady = lugares.imagen_lista("lista_ady");
+        imagen_externo(dir_ady);
+         
+    }//GEN-LAST:event_jMenu_lista_adyacenciaActionPerformed
+
+    private void jMenu_grafo_rutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_grafo_rutasActionPerformed
+        // TODO add your handling code here:
+        String dir_grafo = lugares.imagen_grafo("grafo");
+        imagen_externo(dir_grafo);
+    }//GEN-LAST:event_jMenu_grafo_rutasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -420,7 +443,8 @@ public class Administrador extends javax.swing.JFrame {
                         String depto = (String) valor_interno.get("departamento");
                         String nombre = (String) valor_interno.get("nombre");
                         String sucursal = (String) valor_interno.get("sn_sucursal");
-                        System.out.println(id+"\n"+depto+"\n"+nombre+"\n"+sucursal+"\n");
+                        //System.out.println(id+"\n"+depto+"\n"+nombre+"\n"+sucursal+"\n");
+                        lugares.agregar_lugar(id, depto, nombre, sucursal);
                     }
                 }
             }
@@ -448,7 +472,8 @@ public class Administrador extends javax.swing.JFrame {
                         int inicio = Math.toIntExact((Long)valor_interno.get("inicio"));
                         int fin = Math.toIntExact((Long)valor_interno.get("final"));
                         int peso = Math.toIntExact((Long)valor_interno.get("peso"));
-                        System.out.println(inicio+"\n"+fin+"\n"+peso+"\n");
+                        //System.out.println(inicio+"\n"+fin+"\n"+peso+"\n");
+                        lugares.insertar_ruta(inicio, fin, peso);
                     }
                 }
             }
