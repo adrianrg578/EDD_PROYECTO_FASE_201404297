@@ -40,13 +40,13 @@ public class TablaHash {
     float factor_carga;
     int tamanio;
     
-    public TablaHash(int valor){
+    public TablaHash(){
         this.elementos=0;
         this.factor_carga=0;
-        this.tamanio=valor;
-        this.tabla_hash = new NodoHash[valor];
+        this.tamanio=37;
+        this.tabla_hash = new NodoHash[tamanio];
         
-        for(int i = 0;i>valor;i++){
+        for(int i = 0;i>tamanio;i++){
             tabla_hash[i] = null;
         }
     }
@@ -56,7 +56,13 @@ public class TablaHash {
         int posicion = funcion_hash(dpi);
         NodoHash nuevo = new NodoHash(dpi,nombre,apellido,licencia,genero,
                 telefono,direccion);
-        tabla_hash[posicion]=nuevo;
+        
+        if(tabla_hash[posicion]==null){
+            tabla_hash[posicion]=nuevo;
+        }else{
+            int nueva_posicion = funcion_rehashing(dpi);
+            tabla_hash[nueva_posicion]=nuevo;
+        }
         elementos++;
         factor_carga = (float)elementos/tamanio;
         
@@ -65,10 +71,10 @@ public class TablaHash {
         }
     }
     
-    private int funcion_hash(long indice){
+    private int funcion_rehashing(long indice){
         long posicion;
-        int resultado = 0;
-        posicion = indice%(tamanio-1);
+        int resultado =0; 
+        posicion = indice %(tamanio-1);
         int posint = Math.toIntExact(posicion);
             if(tabla_hash[posint]!=null){
                 boolean vacio = false;
@@ -87,7 +93,14 @@ public class TablaHash {
             }else{
                 resultado = Math.toIntExact(posicion);
             }
-        
+        return resultado;
+    }
+    
+    private int funcion_hash(long indice){
+        long posicion;
+        int resultado = 0;
+        posicion = indice%(tamanio-1);
+        resultado= Math.toIntExact(posicion);
         return resultado;
     }
     
@@ -221,9 +234,20 @@ public class TablaHash {
         return fileOutputPath;
     }
     
-     public String imagen(){
+    public String imagen(){
         archivotxt(generartablatxt());
         String d_imagen = archivopng();
         return d_imagen;
+    }
+    
+    public NodoHash buscar(long dpi){
+        NodoHash resultado = null;
+        int indice = funcion_hash(dpi);
+        if(indice<tabla_hash.length){
+            resultado = tabla_hash[indice];
+        }else{
+            System.out.println("el indice esta fuera del rango");
+        }
+        return resultado;
     }
 }

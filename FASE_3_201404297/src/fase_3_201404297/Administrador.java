@@ -28,7 +28,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class Administrador extends javax.swing.JFrame {
     ArbolB users = new ArbolB();
-    TablaHash mensajeros = new TablaHash(37);
+    TablaHash mensajeros = new TablaHash();
     Grafo lugares = new Grafo();
     /**
      * Creates new form Administador
@@ -50,6 +50,7 @@ public class Administrador extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jText_consola = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu_cerrar_sesion = new javax.swing.JMenuItem();
@@ -77,6 +78,13 @@ public class Administrador extends javax.swing.JFrame {
         jText_consola.setColumns(20);
         jText_consola.setRows(5);
         jScrollPane1.setViewportView(jText_consola);
+
+        jButton1.setText("mejor ruta");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
 
@@ -170,7 +178,9 @@ public class Administrador extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(388, Short.MAX_VALUE)
+                .addGap(82, 82, 82)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -181,8 +191,13 @@ public class Administrador extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jButton1)))
                 .addContainerGap(231, Short.MAX_VALUE))
         );
 
@@ -230,7 +245,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jMenu_cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_cerrar_sesionActionPerformed
         // TODO add your handling code here:
-        Ingreso nuevo = new Ingreso(users);
+        Ingreso nuevo = new Ingreso(users,mensajeros,lugares);
         nuevo.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenu_cerrar_sesionActionPerformed
@@ -285,6 +300,12 @@ public class Administrador extends javax.swing.JFrame {
         imagen_externo(dir_grafo);
     }//GEN-LAST:event_jMenu_grafo_rutasActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        lugares.ruta_corta(1,6);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -322,6 +343,7 @@ public class Administrador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

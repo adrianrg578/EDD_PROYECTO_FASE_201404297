@@ -4,19 +4,59 @@
  */
 package fase_3_201404297;
 
+import java.time.LocalDateTime;
+import javax.swing.DefaultComboBoxModel;
+import java.security.MessageDigest;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author adria
  */
 public class Usuario extends javax.swing.JFrame {
     NodoB actual;
+    TablaHash listado_mensajeros = new TablaHash();
+    Grafo listado_lugares = new Grafo();
+    Blockchain libro_envios = new Blockchain();
+    String id_merkle;
+    DefaultComboBoxModel modelo_lugar_ini = new DefaultComboBoxModel();
+    DefaultComboBoxModel modelo_lugar_fin = new DefaultComboBoxModel();
+    DefaultComboBoxModel modelo_mensajero = new DefaultComboBoxModel();
+    
+    Date fecha;
+    String direccion_destino;
+    String direccion_sucursal;
+    String cliente;
+    String mensajero;
+    DateFormat dateFormat = new SimpleDateFormat("DD-MM-YY-::HH:MM:SS");
+    String fecha_st;
+    int nonce;
     /**
      * Creates new form Usuario
      */
-    public Usuario(NodoB activo) {
+    public Usuario(NodoB activo,TablaHash mensajeros,Grafo lugares) {
         initComponents();
         this.actual=activo;
         jlabel_activo.setText("Usuario Activo: "+actual.user);
+        this.listado_mensajeros = mensajeros;
+        this.listado_lugares=lugares;
+        this.id_merkle = "";
+        this.fecha=null;
+        this.direccion_destino ="";
+        this.direccion_sucursal ="";
+        this.cliente="";
+        this.mensajero="";
+        this.fecha_st = "";
+        this.nonce =0;
+        llenar_mesajero();
+        llenar_lugar();
     }
 
     /**
@@ -41,6 +81,7 @@ public class Usuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea_consola = new javax.swing.JTextArea();
         jlabel_activo = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu_cerrar_sesion = new javax.swing.JMenuItem();
@@ -51,28 +92,45 @@ public class Usuario extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jComboBox_imagen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_imagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_imagenActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Imagen a enviar");
 
         jLabel2.setText("Lugar Inicial");
 
-        jComboBox_lugar_inicial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_lugar_inicial.setModel(modelo_lugar_ini);
 
         jLabel3.setText("Lugar Final");
 
-        jComboBox_lugar_final.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_lugar_final.setModel(modelo_lugar_fin);
 
         jLabel4.setText("Mensajero");
 
-        jComboBox_mensajero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_mensajero.setModel(modelo_mensajero);
 
         jButton1.setText("Realizar Envio");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Consola");
 
         jTextArea_consola.setColumns(20);
         jTextArea_consola.setRows(5);
         jScrollPane1.setViewportView(jTextArea_consola);
+
+        jButton2.setText("Prueba de Trabajo");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
 
@@ -113,10 +171,13 @@ public class Usuario extends javax.swing.JFrame {
                         .addGap(107, 107, 107)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(64, 64, 64)
+                                .addComponent(jButton2))))
                     .addComponent(jButton1)
                     .addComponent(jlabel_activo))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,21 +190,23 @@ public class Usuario extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jComboBox_imagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox_lugar_inicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox_lugar_final, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox_mensajero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jComboBox_imagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jComboBox_lugar_inicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jComboBox_lugar_final, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jComboBox_mensajero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2))
                 .addGap(8, 8, 8)
                 .addComponent(jButton1)
                 .addGap(76, 76, 76))
@@ -151,6 +214,71 @@ public class Usuario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBox_imagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_imagenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_imagenActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String imagen = (String) jComboBox_imagen.getSelectedItem();
+        String imagen_edit = imagen.replace(" ","_");
+        Nodo_ady lugar_i = listado_lugares.buscar((int)jComboBox_lugar_inicial.getSelectedItem());
+        direccion_sucursal = lugar_i.departamento+","+lugar_i.nombre;
+        fecha = new Date();
+        Nodo_ady lugar_f = listado_lugares.buscar((int)jComboBox_lugar_final.getSelectedItem());
+        direccion_destino = lugar_f.departamento+","+ lugar_f.nombre;
+        String cliente_edit =actual.nombre;
+        cliente = cliente_edit.replace(" ", "_");
+        NodoHash mens = listado_mensajeros.buscar((int)jComboBox_mensajero.getSelectedItem());
+        mensajero = mens.nombre+"_"+mens.apellido;
+        String ruta_optima ="";
+ 
+        String cadena_a_cifrar ="";
+        cadena_a_cifrar +=imagen_edit+direccion_sucursal+fecha+direccion_destino+cliente+mensajero+ruta_optima;
+        String cadena_edit = cadena_a_cifrar.replace(" ","_");
+        System.out.println(cadena_edit);
+        id_merkle = encriptar(cadena_edit);
+        System.out.println(id_merkle);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String imagen = (String) jComboBox_imagen.getSelectedItem();
+        String imagen_edit = imagen.replace(" ","_");
+        Nodo_ady lugar_i = listado_lugares.buscar((int)jComboBox_lugar_inicial.getSelectedItem());
+        direccion_sucursal = lugar_i.departamento+","+lugar_i.nombre;
+        fecha = new Date();
+        fecha_st =dateFormat.format(fecha);
+        Nodo_ady lugar_f = listado_lugares.buscar((int)jComboBox_lugar_final.getSelectedItem());
+        direccion_destino = lugar_f.departamento+","+ lugar_f.nombre;
+        String cliente_edit =actual.nombre;
+        cliente = cliente_edit.replace(" ", "_");
+        NodoHash mens = listado_mensajeros.buscar((Long)jComboBox_mensajero.getSelectedItem());
+        mensajero = mens.nombre+"_"+mens.apellido;
+        String ruta_optima ="";
+ 
+        String cadena_a_cifrar ="";
+        cadena_a_cifrar +=imagen_edit+direccion_sucursal+fecha_st+direccion_destino+cliente+mensajero+ruta_optima;
+        String cadena_edit = cadena_a_cifrar.replace(" ","_");
+        System.out.println(cadena_edit);
+        id_merkle = encriptar(cadena_edit);
+        Nodo_data nuevo = new Nodo_data(direccion_sucursal,direccion_destino,fecha_st, cliente, mensajero);
+        
+        String prev = "0000";
+        String trabajo = "";
+        try {
+            trabajo = prueba_trabajo(0,fecha_st,prev,id_merkle,4);
+            
+            if(libro_envios.primero==null){
+            libro_envios.insertar(0,fecha_st,nonce,nuevo,prev,id_merkle,trabajo);
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("trono la prueba de trabajo");
+        }
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,13 +310,14 @@ public class Usuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Usuario(null).setVisible(true);
+                new Usuario(null,null,null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox_imagen;
     private javax.swing.JComboBox<String> jComboBox_lugar_final;
     private javax.swing.JComboBox<String> jComboBox_lugar_inicial;
@@ -208,4 +337,82 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea_consola;
     private javax.swing.JLabel jlabel_activo;
     // End of variables declaration//GEN-END:variables
+
+    private void llenar_mesajero(){
+        NodoHash[] aux = listado_mensajeros.tabla_hash;
+        for(int i = 0; i<aux.length;i++){
+            if(aux[i]!=null){
+                //System.out.println("indice: "+ i +"  DPI: "+aux[i].dpi);
+                modelo_mensajero.addElement(aux[i].dpi);
+            }else{
+                //System.out.println("indice: "+ i +"DPI: vacio" );
+            }
+        }
+    }
+    
+    private void llenar_lugar(){
+        Nodo_ady aux = listado_lugares.primero;
+        while(aux!=null){
+            //System.out.println("id: "+aux.id+"  nombre: "+aux.nombre);
+            modelo_lugar_ini.addElement(aux.id);
+            modelo_lugar_fin.addElement(aux.id);
+            aux = aux.abajo;
+        }
+    }
+    
+    public byte[] getSHA(String input)throws NoSuchAlgorithmException{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        return md.digest(input.getBytes(StandardCharsets.UTF_8));
+    }
+    
+    public String toHexString(byte[] hash){
+        BigInteger number = new BigInteger(1,hash);
+        StringBuilder hexString = new StringBuilder(number.toString(16));
+        while (hexString.length()<64){
+            hexString.insert(0,'0');
+        }
+        return hexString.toString();
+    }
+    
+    public String encriptar(String cadena){
+        String result = "";
+        try{
+            result = toHexString(getSHA(cadena));
+        }catch(NoSuchAlgorithmException e){
+            System.out.println("NO se pudo crear el cifrado");
+        }
+        return result;
+    }
+    
+    public String prueba_trabajo(int index,String time,String previo,
+            String id_merkle,int ceros) throws NoSuchAlgorithmException{
+        String result = "";
+        boolean valido = true;
+        char comparador = '0';
+        int contador =0;
+        String hash = index+time+previo+id_merkle;
+        String hash_fix = hash.replace(" ","");
+        String hashed_text = toHexString(getSHA(hash_fix+nonce));
+        while(valido){
+            contador = 0;
+            for(int i =0;i<ceros;i++){
+                if(Character.compare(comparador,hashed_text.charAt(i))==0){
+                    contador++;
+                    System.out.println("encontro un cero");
+                }
+                if(contador==ceros){
+                    valido = false;
+                    break;
+                }
+            }
+            if(valido){
+            nonce++;
+            System.out.println(nonce);
+            hashed_text = toHexString(getSHA(hash_fix+nonce));
+            }
+        }
+        
+        result = hashed_text;
+        return result;
+    }
 }

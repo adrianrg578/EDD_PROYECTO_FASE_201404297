@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  * La clase se llama grafo porque lo que se hara es para representar un grafo
@@ -75,12 +76,22 @@ class Lista_ruta{
            tamanio++;
        }  
     }
+    
+    public void imprimir(){
+        Nodo_ruta aux = primero;
+        while(aux!=null){
+            System.out.println("nodo: "+aux.fin+" peso: "+aux.peso);
+            aux = aux.siguiente;
+        }
+    }
 }
 
 public class Grafo {
     Nodo_ady primero;
     Nodo_ady ultimo;
     int tamanio;
+    Cola candidato = new Cola();
+    Lista_ruta optima = new Lista_ruta();
     
     public Grafo(){
        this.primero = null;
@@ -330,5 +341,117 @@ public class Grafo {
         archivotxt(gen_grafo(),nombre);
         String d_imagen = archivopng(nombre);
         return d_imagen;
+    }
+    
+    public void ruta_corta(int partida,int destino){
+        boolean visitado[] = new boolean[tamanio];
+        String camino = "";
+        for (int i = 0; i < visitado.length; i++) {
+                visitado[i]=false;
+        }
+        Cola candidato = new Cola();
+        buscar_camino(partida,destino);
+        
+        System.out.println(optima.tamanio);
+        optima.imprimir();
+    }
+    
+    public Nodo_ady buscar(int id){
+        Nodo_ady aux = primero;
+        Nodo_ady resultado = null;
+        while(aux!=null){
+            if(aux.id==id){
+                resultado = aux;
+                break;
+            }
+            aux = aux.abajo;
+        }
+        return resultado;
+    }
+    
+    private void buscar_camino(int partida, int destino){
+        Nodo_ady aux = buscar(partida);
+        Nodo_ruta temp = aux.listado_ruta.primero;
+        boolean result = false;
+        while(temp!=null){
+            candidato.insertar(temp.fin,temp.peso);
+            temp = temp.siguiente;
+        }
+        int tamanio = candidato.tamanio;
+        for(int i =0;i<tamanio;i++){
+            if(!result){
+            NCola lug = candidato.extraer();
+            if(lug==null){
+                break;
+            }
+            optima.insertar(partida,lug.id,lug.peso);
+            optima.tamanio++;
+            if(lug.id == destino){
+                //optima.insertar(partida,lug.id,lug.peso);
+                result = terminar(true);
+                break;
+            }else{
+                buscar_camino(lug.id,destino);
+            }
+            
+        }
+        }
+   
+    }
+    
+    private boolean terminar(boolean result){
+        return result;
+    }
+}   
+
+class NCola{
+    int id;
+    int peso;
+    NCola siguiente;
+    
+    public NCola(int id, int peso){
+        this.id = id;
+        this.peso=peso;
+        this.siguiente=null;
+    }
+}
+
+class Cola{
+    int tamanio;
+    NCola primero;
+    NCola ultimo;
+    
+    public Cola(){
+        this.tamanio=0;
+        this.primero = null;
+        this.ultimo= null;
+    }
+    
+    public void insertar(int id,int peso){
+        NCola nuevo = new NCola(id,peso);
+        if(primero==null){
+            primero = nuevo;
+            ultimo = nuevo;
+            tamanio++;
+        }else{
+            ultimo.siguiente=nuevo;
+            ultimo = nuevo;
+            tamanio++;
+        }
+    }
+    
+    public NCola extraer(){
+        NCola resultado = null;
+        NCola aux=null;
+        if(primero == null){
+            resultado = null;
+            return resultado;
+        }else {
+            NCola temp = primero.siguiente;
+            aux = primero;
+            primero.siguiente = null;
+            primero = temp;
+            return aux;
+        }
     }
 }

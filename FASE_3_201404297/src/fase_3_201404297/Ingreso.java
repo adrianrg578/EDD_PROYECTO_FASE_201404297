@@ -12,13 +12,18 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class Ingreso extends javax.swing.JFrame {
     ArbolB lista_usuarios = new ArbolB();
+    TablaHash lista_mensajeros = new TablaHash();
+    Grafo lista_lugares = new Grafo();
+    
     
     /**
      * Creates new form Ingreso
      */
-    public Ingreso(ArbolB lista_users) {
+    public Ingreso(ArbolB lista_users,TablaHash lista_mensajeros,Grafo lista_lug) {
         initComponents();
         this.lista_usuarios= lista_users;
+        this.lista_mensajeros=lista_mensajeros;
+        this.lista_lugares = lista_lug;
     }
 
     /**
@@ -125,7 +130,7 @@ public class Ingreso extends javax.swing.JFrame {
                 if(temp !=null){
                     boolean match_pass = BCrypt.checkpw(pass,lista_usuarios.buscar(user).contrasenia);
                     if(match_pass){
-                        Usuario nuevo = new Usuario(lista_usuarios.buscar(user));
+                        Usuario nuevo = new Usuario(lista_usuarios.buscar(user),lista_mensajeros,lista_lugares);
                         nuevo.setVisible(true);
                         this.dispose();
                     }
@@ -165,7 +170,7 @@ public class Ingreso extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Ingreso(null).setVisible(true);
+                new Ingreso(null,null,null).setVisible(true);
             }
         });
     }
