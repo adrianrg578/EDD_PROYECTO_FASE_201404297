@@ -413,6 +413,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jMenu_arbol_merkleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_arbol_merkleActionPerformed
         // TODO add your handling code here:
+        libro_entregas.ultimo.data.hash_root();
         String d_img = libro_entregas.ultimo.data.imagen_Merkle("ultimo_merkle");
         imagen_externo(d_img);
     }//GEN-LAST:event_jMenu_arbol_merkleActionPerformed

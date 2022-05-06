@@ -431,7 +431,6 @@ public class Usuario extends javax.swing.JFrame {
     }
     
     public void imagen_externo(String urlimg){
-        boolean mostrada = false;
         try{
             System.out.println(urlimg);
             File file = new File(urlimg);
@@ -448,15 +447,13 @@ public class Usuario extends javax.swing.JFrame {
             jframe.add(jlabel);
             jframe.setVisible(true);
             jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            mostrada = true;
+
         } catch (IOException ex) {
             System.out.println("Ocurrio un error inesperado no se mostro la imagen");
-            mostrada=false;
+
 
         }
-        if(!mostrada){
-            imagen_externo(urlimg);
-        }
+        
     
     }
 }
