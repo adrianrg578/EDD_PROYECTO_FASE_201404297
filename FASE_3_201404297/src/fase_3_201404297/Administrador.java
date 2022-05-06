@@ -33,6 +33,7 @@ public class Administrador extends javax.swing.JFrame {
     
     Blockchain libro_entregas;
     int def_ceros;
+    int tiempo;
     
     /**
      * Creates new form Administador
@@ -40,6 +41,7 @@ public class Administrador extends javax.swing.JFrame {
     public Administrador() {
         initComponents();
         this.def_ceros=4;
+        this.tiempo = 180;
         this.libro_entregas = new Blockchain(def_ceros);
     }
 
@@ -60,6 +62,9 @@ public class Administrador extends javax.swing.JFrame {
         jText_cantidad_ceros = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jBoton_ceros = new javax.swing.JButton();
+        jText_tiempo = new javax.swing.JTextField();
+        jBoton_tiempo = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu_cerrar_sesion = new javax.swing.JMenuItem();
@@ -104,6 +109,10 @@ public class Administrador extends javax.swing.JFrame {
                 jBoton_cerosActionPerformed(evt);
             }
         });
+
+        jBoton_tiempo.setText("Cambiar");
+
+        jLabel3.setText("Cantidad de tiempo (default: 3 min)");
 
         jMenu1.setText("Archivo");
 
@@ -222,10 +231,15 @@ public class Administrador extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jText_cantidad_ceros, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(jBoton_ceros))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jText_cantidad_ceros, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jBoton_ceros, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jText_tiempo, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jBoton_tiempo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -243,8 +257,14 @@ public class Administrador extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jText_cantidad_ceros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBoton_ceros)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBoton_ceros)
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jText_tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jBoton_tiempo)))
                 .addGap(52, 52, 52)
                 .addComponent(jButton1)
                 .addContainerGap(156, Short.MAX_VALUE))
@@ -435,9 +455,11 @@ public class Administrador extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBoton_ceros;
+    private javax.swing.JButton jBoton_tiempo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -458,6 +480,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jText_cantidad_ceros;
     private javax.swing.JTextArea jText_consola;
+    private javax.swing.JTextField jText_tiempo;
     // End of variables declaration//GEN-END:variables
     //metodos de lectura e muestra de imagenes
     

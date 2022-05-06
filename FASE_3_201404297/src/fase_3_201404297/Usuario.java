@@ -5,6 +5,7 @@
 package fase_3_201404297;
 
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class Usuario extends javax.swing.JFrame {
     String mensajero;
     DateFormat dateFormat = new SimpleDateFormat("DD-MM-YY-::HH:MM:SS");
     String fecha_st;
+    int contador;
     int nonce;
     
     /**
@@ -66,6 +68,7 @@ public class Usuario extends javax.swing.JFrame {
         this.mensajero="";
         this.fecha_st = "";
         this.nonce =0;
+        this.contador=0;
         llenar_mesajero();
         llenar_lugar();
     }
@@ -277,7 +280,9 @@ public class Usuario extends javax.swing.JFrame {
             NodoBlock actual = libro_envios.insertar(fecha_st,nonce,operaciones,prev,merkle_root,trabajo);
             libro_envios.guardar_json(actual);
             operaciones.imprimir();
-            String dir_arbol =operaciones.imagen_Merkle("arbol_");
+            jTextArea_consola.append("Raiz arbol Merkle actual: "+merkle_root+"\n");
+            String dir_arbol =operaciones.imagen_Merkle("arbol_"+contador);
+            contador++;
             imagen_externo(dir_arbol);
             operaciones.reiniciar_arbol();
             
@@ -426,10 +431,14 @@ public class Usuario extends javax.swing.JFrame {
     }
     
     public void imagen_externo(String urlimg){
+        boolean mostrada = false;
         try{
+            System.out.println(urlimg);
             File file = new File(urlimg);
-            BufferedImage bufferedImage = ImageIO.read(file);
-            ImageIcon imageIcon = new ImageIcon(bufferedImage);
+            //BufferedImage bufferedImage = ImageIO.read(file);
+            //ImageIcon imageIcon = new ImageIcon(bufferedImage);
+            Image imagen = ImageIO.read(file);
+            ImageIcon imageIcon = new ImageIcon(imagen);
             JFrame jframe = new JFrame();
             jframe.setLayout(new FlowLayout());
             jframe.setSize(600, 800);
@@ -439,9 +448,14 @@ public class Usuario extends javax.swing.JFrame {
             jframe.add(jlabel);
             jframe.setVisible(true);
             jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            mostrada = true;
         } catch (IOException ex) {
             System.out.println("Ocurrio un error inesperado no se mostro la imagen");
+            mostrada=false;
 
+        }
+        if(!mostrada){
+            imagen_externo(urlimg);
         }
     
     }

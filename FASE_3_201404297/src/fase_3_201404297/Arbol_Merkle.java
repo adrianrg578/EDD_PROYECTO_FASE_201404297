@@ -244,7 +244,7 @@ public class Arbol_Merkle {
         String ruta_a ="C:\\Users\\adria\\Desktop\\recursos_f3\\"+nombre+".txt";
         String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
         String fileInputPath =ruta_a;
-        String fileOutputPath =ruta_a.replace(".txt", ".png");
+        String fileOutputPath =ruta_a.replace(".txt", ".jpg");
         String tParam = "-Tjpg";
         String tOParam = "-o";
         try {  

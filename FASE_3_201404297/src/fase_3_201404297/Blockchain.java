@@ -101,6 +101,7 @@ public class Blockchain {
             ultimo.siguiente=nuevo;
             nuevo.anterior=ultimo;
             ultimo=nuevo;
+            tamanio++;
         }
         return nuevo;
     }
