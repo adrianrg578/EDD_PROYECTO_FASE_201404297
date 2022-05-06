@@ -14,16 +14,18 @@ public class Ingreso extends javax.swing.JFrame {
     ArbolB lista_usuarios = new ArbolB();
     TablaHash lista_mensajeros = new TablaHash();
     Grafo lista_lugares = new Grafo();
+    int default_ceros;
     
     
     /**
      * Creates new form Ingreso
      */
-    public Ingreso(ArbolB lista_users,TablaHash lista_mensajeros,Grafo lista_lug) {
+    public Ingreso(ArbolB lista_users,TablaHash lista_mensajeros,Grafo lista_lug,int ceros) {
         initComponents();
         this.lista_usuarios= lista_users;
         this.lista_mensajeros=lista_mensajeros;
         this.lista_lugares = lista_lug;
+        this.default_ceros = ceros;
     }
 
     /**
@@ -130,7 +132,7 @@ public class Ingreso extends javax.swing.JFrame {
                 if(temp !=null){
                     boolean match_pass = BCrypt.checkpw(pass,lista_usuarios.buscar(user).contrasenia);
                     if(match_pass){
-                        Usuario nuevo = new Usuario(lista_usuarios.buscar(user),lista_mensajeros,lista_lugares);
+                        Usuario nuevo = new Usuario(lista_usuarios.buscar(user),lista_mensajeros,lista_lugares,default_ceros);
                         nuevo.setVisible(true);
                         this.dispose();
                     }
@@ -170,7 +172,7 @@ public class Ingreso extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Ingreso(null,null,null).setVisible(true);
+                new Ingreso(null,null,null,4).setVisible(true);
             }
         });
     }

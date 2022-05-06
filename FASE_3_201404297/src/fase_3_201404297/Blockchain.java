@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -29,16 +31,17 @@ class NodoBlock{
     int index;
     String timestamp;
     int nonce;
-    Nodo_data data;
+    Arbol_Merkle data;
     String prevhash;
     String raizmerkle;
     String hash;
+
     
     //punteros
     NodoBlock siguiente;
     NodoBlock anterior;
     
-    public NodoBlock(int index,String timestamp,int nonce,Nodo_data data, 
+    public NodoBlock(int index,String timestamp,int nonce,Arbol_Merkle data, 
             String prevhash,String raizmerkle,String hash){
        this.index=index;
        this.timestamp=timestamp;
@@ -47,6 +50,7 @@ class NodoBlock{
        this.prevhash =prevhash;
        this.raizmerkle=raizmerkle;
        this.hash = hash;
+
        
        this.anterior=null;
        this.siguiente=null;
@@ -73,21 +77,22 @@ class NodoBlock{
 public class Blockchain {
     int tamanio;
     int tiempo;
+    int ceros;
     NodoBlock primero;
     NodoBlock ultimo;
     
-    public Blockchain(){
+    public Blockchain(int ceros){
         this.tiempo = 3;
         this.tamanio = 0;
+        this.ceros = ceros;
         this.primero=null;
         this.ultimo =null;
     }
     
-    public void insertar(int index,String timestamp,int nonce,Nodo_data data, 
+    public NodoBlock insertar(String timestamp,int nonce,Arbol_Merkle data, 
             String prevhash,String raizmerkle,String hash){
         String time_edit =timestamp.replace(" ","_");
-        NodoBlock nuevo = new NodoBlock(index, time_edit, nonce, data, prevhash, raizmerkle, hash);
-        guardar_json(nuevo);
+        NodoBlock nuevo = new NodoBlock(tamanio,time_edit, nonce, data, prevhash, raizmerkle, hash);
         if(primero==null){
             primero = nuevo;
             ultimo = nuevo;
@@ -97,21 +102,34 @@ public class Blockchain {
             nuevo.anterior=ultimo;
             ultimo=nuevo;
         }
+        return nuevo;
     }
     
     public void guardar_json(NodoBlock bloque){
         JSONObject libro = new JSONObject();
         JSONObject nodo = new JSONObject();
-        JSONObject data = new JSONObject();
+
+        JSONArray data_list = new JSONArray();
+        
         nodo.put("INDEX", bloque.index);
         nodo.put("TIMESTAMP", bloque.timestamp);
         nodo.put("NONCE", bloque.nonce);
-        data.put("sede",bloque.data.sede);
-        data.put("destino",bloque.data.destino);
-        data.put("datetime",bloque.data.datetime);
-        data.put("cliente",bloque.data.cliente);
-        data.put("mensajero",bloque.data.mensajero);
-        nodo.put("DATA",data+"\n");
+        for(int i=0;i<bloque.data.tamanio;i++){
+            JSONObject data = new JSONObject();
+            Nodo_Merkle aux = bloque.data.nodos[i];
+            if(aux!=null){
+                if(!aux.cliente.contains("raiz")){
+                    data.put("sede",aux.sede);
+                    data.put("destino",aux.destino);
+                    data.put("datetime",aux.fecha_hora);
+                    data.put("cliente",aux.cliente);
+                    data.put("mensajero",aux.mensajero);  
+                    data_list.add(data);}
+            }
+        }
+       
+        nodo.put("DATA",data_list);
+        
         nodo.put("PREVIOUSHASH",bloque.prevhash);
         nodo.put("ROOTMERKLE",bloque.raizmerkle);
         nodo.put("HASH",bloque.hash);
@@ -183,5 +201,103 @@ public class Blockchain {
             System.out.println("NO se pudo crear el cifrado");
         }
         return result;
+    }
+    
+    public int get_ceros(){
+        int result = ceros;
+        return result;
+    }
+    
+    public void set_ceros(int cero){
+        this.ceros=cero;
+    }
+    
+    public String gentxt_bloque(){
+        String grafotxt = "";
+        grafotxt = "digraph bloques { rankdir = LR; \n";
+        String f = "shape=box,";
+        String nodos_b = "";
+        String conexiones = "";
+        NodoBlock aux = primero;
+            while(aux != null){
+                int index = aux.index;
+                String timestamp = aux.timestamp;
+                int nonce= aux.nonce;
+                String prevhash = aux.prevhash;
+                String root_merkle = aux.raizmerkle;
+                String hash = aux.hash;
+                nodos_b += index+"["+f +"label = \""+"Hash previo: "+prevhash+"\\n"+"Raiz Merkle: "+
+                        root_merkle+"\\n \"];\n";
+                
+                /*for(int i = 0;i<aux.data.tamanio;i++){
+                    Nodo_Merkle temp = aux.data.nodos[i];
+                    
+                    String sede = temp.sede;
+                    String destino = temp.destino;
+                    String datetime = temp.fecha_hora;
+                    String cliente = temp.cliente;
+                    String mensajero = temp.mensajero;
+                
+                }*/
+                if(aux.siguiente!=null){
+                 conexiones+=index+"->"+aux.siguiente.index+";\n";
+                }
+                aux = aux.siguiente;
+            }
+        grafotxt += nodos_b;
+        grafotxt += "{rank = same; \n";
+        grafotxt += conexiones;
+        grafotxt += "}\n";
+        grafotxt += "}\n";
+        return grafotxt;
+    }
+    private void archivotxt(String codigo_txt,String nombre){
+        String tabla = "C:\\Users\\adria\\Desktop\\recursos_f3\\"+nombre+".txt";
+        try {
+            File f;
+            f = new File(tabla);
+            if(!f.exists()){
+                f.createNewFile();
+            }
+            FileWriter w = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(w);
+            PrintWriter wr = new PrintWriter(bw);
+            wr.write(codigo_txt);
+            wr.close();
+            bw.close();
+        } catch (Exception e) {
+        System.out.println("NO SE PUDO CREAR EL ARCHIVO");
+        }
+    }
+    
+    private String archivopng(String nombre){
+        String ruta_a ="C:\\Users\\adria\\Desktop\\recursos_f3\\"+nombre+".txt";
+        String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+        String fileInputPath =ruta_a;
+        String fileOutputPath =ruta_a.replace(".txt", ".png");
+        String tParam = "-Tjpg";
+        String tOParam = "-o";
+        try {  
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+                  
+            Runtime rt = Runtime.getRuntime();
+      
+            rt.exec( cmd );
+      
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return fileOutputPath;
+    }
+    
+    public String imagen_bloque(String nombre){
+        archivotxt(gentxt_bloque(),nombre);
+        String d_imagen = archivopng(nombre);
+        return d_imagen;
     }
 }

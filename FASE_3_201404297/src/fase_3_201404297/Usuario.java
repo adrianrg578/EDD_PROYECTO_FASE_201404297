@@ -4,6 +4,10 @@
  */
 package fase_3_201404297;
 
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import javax.swing.DefaultComboBoxModel;
 import java.security.MessageDigest;
@@ -15,6 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -24,7 +32,8 @@ public class Usuario extends javax.swing.JFrame {
     NodoB actual;
     TablaHash listado_mensajeros = new TablaHash();
     Grafo listado_lugares = new Grafo();
-    Blockchain libro_envios = new Blockchain();
+    Blockchain libro_envios;
+    Arbol_Merkle operaciones = new Arbol_Merkle();
     String id_merkle;
     DefaultComboBoxModel modelo_lugar_ini = new DefaultComboBoxModel();
     DefaultComboBoxModel modelo_lugar_fin = new DefaultComboBoxModel();
@@ -38,15 +47,17 @@ public class Usuario extends javax.swing.JFrame {
     DateFormat dateFormat = new SimpleDateFormat("DD-MM-YY-::HH:MM:SS");
     String fecha_st;
     int nonce;
+    
     /**
      * Creates new form Usuario
      */
-    public Usuario(NodoB activo,TablaHash mensajeros,Grafo lugares) {
+    public Usuario(NodoB activo,TablaHash mensajeros,Grafo lugares,int ceros) {
         initComponents();
         this.actual=activo;
         jlabel_activo.setText("Usuario Activo: "+actual.user);
         this.listado_mensajeros = mensajeros;
         this.listado_lugares=lugares;
+        this.libro_envios = new Blockchain(ceros);
         this.id_merkle = "";
         this.fecha=null;
         this.direccion_destino ="";
@@ -226,29 +237,6 @@ public class Usuario extends javax.swing.JFrame {
         Nodo_ady lugar_i = listado_lugares.buscar((int)jComboBox_lugar_inicial.getSelectedItem());
         direccion_sucursal = lugar_i.departamento+","+lugar_i.nombre;
         fecha = new Date();
-        Nodo_ady lugar_f = listado_lugares.buscar((int)jComboBox_lugar_final.getSelectedItem());
-        direccion_destino = lugar_f.departamento+","+ lugar_f.nombre;
-        String cliente_edit =actual.nombre;
-        cliente = cliente_edit.replace(" ", "_");
-        NodoHash mens = listado_mensajeros.buscar((int)jComboBox_mensajero.getSelectedItem());
-        mensajero = mens.nombre+"_"+mens.apellido;
-        String ruta_optima ="";
- 
-        String cadena_a_cifrar ="";
-        cadena_a_cifrar +=imagen_edit+direccion_sucursal+fecha+direccion_destino+cliente+mensajero+ruta_optima;
-        String cadena_edit = cadena_a_cifrar.replace(" ","_");
-        System.out.println(cadena_edit);
-        id_merkle = encriptar(cadena_edit);
-        System.out.println(id_merkle);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        String imagen = (String) jComboBox_imagen.getSelectedItem();
-        String imagen_edit = imagen.replace(" ","_");
-        Nodo_ady lugar_i = listado_lugares.buscar((int)jComboBox_lugar_inicial.getSelectedItem());
-        direccion_sucursal = lugar_i.departamento+","+lugar_i.nombre;
-        fecha = new Date();
         fecha_st =dateFormat.format(fecha);
         Nodo_ady lugar_f = listado_lugares.buscar((int)jComboBox_lugar_final.getSelectedItem());
         direccion_destino = lugar_f.departamento+","+ lugar_f.nombre;
@@ -259,20 +247,40 @@ public class Usuario extends javax.swing.JFrame {
         String ruta_optima ="";
  
         String cadena_a_cifrar ="";
-        cadena_a_cifrar +=imagen_edit+direccion_sucursal+fecha_st+direccion_destino+cliente+mensajero+ruta_optima;
+        cadena_a_cifrar +=direccion_sucursal+fecha+direccion_destino+cliente+mensajero+ruta_optima;
         String cadena_edit = cadena_a_cifrar.replace(" ","_");
         System.out.println(cadena_edit);
         id_merkle = encriptar(cadena_edit);
-        Nodo_data nuevo = new Nodo_data(direccion_sucursal,direccion_destino,fecha_st, cliente, mensajero);
+        operaciones.agregar(id_merkle,direccion_sucursal,direccion_destino,fecha_st,cliente, mensajero);
         
-        String prev = "0000";
+        System.out.println(id_merkle);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        //Nodo_Merkle aux = operaciones.buscar(id_merkle);
+        String prev = "";
+        int indice = 0;
+        int ceros = libro_envios.get_ceros();
+        if(libro_envios.tamanio<1){
+            prev ="0000";
+            indice = 0;
+        }else{
+            prev = libro_envios.ultimo.hash;
+            indice = libro_envios.tamanio;
+        }
         String trabajo = "";
         try {
-            trabajo = prueba_trabajo(0,fecha_st,prev,id_merkle,4);
+            trabajo = prueba_trabajo(indice,fecha_st,prev,id_merkle,ceros);
             
-            if(libro_envios.primero==null){
-            libro_envios.insertar(0,fecha_st,nonce,nuevo,prev,id_merkle,trabajo);
-            }
+            String merkle_root = operaciones.hash_root();
+            NodoBlock actual = libro_envios.insertar(fecha_st,nonce,operaciones,prev,merkle_root,trabajo);
+            libro_envios.guardar_json(actual);
+            operaciones.imprimir();
+            String dir_arbol =operaciones.imagen_Merkle("arbol_");
+            imagen_externo(dir_arbol);
+            operaciones.reiniciar_arbol();
+            
         } catch (NoSuchAlgorithmException ex) {
             System.out.println("trono la prueba de trabajo");
         }
@@ -310,7 +318,7 @@ public class Usuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Usuario(null,null,null).setVisible(true);
+                new Usuario(null,null,null,4).setVisible(true);
             }
         });
     }
@@ -386,6 +394,7 @@ public class Usuario extends javax.swing.JFrame {
     
     public String prueba_trabajo(int index,String time,String previo,
             String id_merkle,int ceros) throws NoSuchAlgorithmException{
+        nonce=0;
         String result = "";
         boolean valido = true;
         char comparador = '0';
@@ -414,5 +423,26 @@ public class Usuario extends javax.swing.JFrame {
         
         result = hashed_text;
         return result;
+    }
+    
+    public void imagen_externo(String urlimg){
+        try{
+            File file = new File(urlimg);
+            BufferedImage bufferedImage = ImageIO.read(file);
+            ImageIcon imageIcon = new ImageIcon(bufferedImage);
+            JFrame jframe = new JFrame();
+            jframe.setLayout(new FlowLayout());
+            jframe.setSize(600, 800);
+            JLabel jlabel = new JLabel();
+            
+            jlabel.setIcon(imageIcon);
+            jframe.add(jlabel);
+            jframe.setVisible(true);
+            jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } catch (IOException ex) {
+            System.out.println("Ocurrio un error inesperado no se mostro la imagen");
+
+        }
+    
     }
 }

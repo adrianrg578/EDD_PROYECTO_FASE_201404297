@@ -30,11 +30,17 @@ public class Administrador extends javax.swing.JFrame {
     ArbolB users = new ArbolB();
     TablaHash mensajeros = new TablaHash();
     Grafo lugares = new Grafo();
+    
+    Blockchain libro_entregas;
+    int def_ceros;
+    
     /**
      * Creates new form Administador
      */
     public Administrador() {
         initComponents();
+        this.def_ceros=4;
+        this.libro_entregas = new Blockchain(def_ceros);
     }
 
     /**
@@ -51,6 +57,9 @@ public class Administrador extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jText_consola = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
+        jText_cantidad_ceros = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jBoton_ceros = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu_cerrar_sesion = new javax.swing.JMenuItem();
@@ -61,6 +70,7 @@ public class Administrador extends javax.swing.JFrame {
         jMenu_carga_ruta = new javax.swing.JMenuItem();
         jMenu_carga_usuarios = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenu_arbol_merkle = new javax.swing.JMenuItem();
         jMenu_blockchain = new javax.swing.JMenuItem();
         jMenu_grafo_rutas = new javax.swing.JMenuItem();
         jMenu_lista_adyacencia = new javax.swing.JMenuItem();
@@ -83,6 +93,15 @@ public class Administrador extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Cantidad de ceros (default: 4)");
+
+        jBoton_ceros.setText("Cambiar");
+        jBoton_ceros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBoton_cerosActionPerformed(evt);
             }
         });
 
@@ -139,7 +158,20 @@ public class Administrador extends javax.swing.JFrame {
 
         jMenu3.setText("Ver");
 
+        jMenu_arbol_merkle.setText("Arbol de Merkle");
+        jMenu_arbol_merkle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_arbol_merkleActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenu_arbol_merkle);
+
         jMenu_blockchain.setText("Blockchain");
+        jMenu_blockchain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_blockchainActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenu_blockchain);
 
         jMenu_grafo_rutas.setText("Grafo de Rutas");
@@ -159,6 +191,11 @@ public class Administrador extends javax.swing.JFrame {
         jMenu3.add(jMenu_lista_adyacencia);
 
         jMenu_nodo_red.setText("Nodos de la red");
+        jMenu_nodo_red.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu_nodo_redActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenu_nodo_red);
 
         jMenu_tabla_dispersion.setText("Tabla de dispersion (Hash)");
@@ -178,27 +215,39 @@ public class Administrador extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(82, 82, 82)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jText_cantidad_ceros, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jBoton_ceros))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(78, 78, 78))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jButton1)))
-                .addContainerGap(231, Short.MAX_VALUE))
+                        .addComponent(jText_cantidad_ceros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBoton_ceros)))
+                .addGap(52, 52, 52)
+                .addComponent(jButton1)
+                .addContainerGap(156, Short.MAX_VALUE))
         );
 
         pack();
@@ -217,13 +266,14 @@ public class Administrador extends javax.swing.JFrame {
                     "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
         }
         carga_user_json(archivo.getAbsolutePath());
-        
+        jText_consola.append("se agregaron usuarios / clientes \n");
         NodoB prueba = users.buscar("Vanny07");
         if(prueba == null){
             System.out.println("el metodo no funciono");
         }else{
             System.out.println("nombre: " + prueba.nombre + " pass: "+prueba.contrasenia);
         }
+        
     }//GEN-LAST:event_jMenu_carga_usuariosActionPerformed
 
     private void jMenu_carga_mensajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_carga_mensajeroActionPerformed
@@ -241,11 +291,12 @@ public class Administrador extends javax.swing.JFrame {
         carga_mensajeros(archivo.getAbsolutePath());
         System.out.println(mensajeros.elementos + " factor cargar: "+mensajeros.factor_carga);
         mensajeros.imprimir();
+        jText_consola.append("se agregaron los mensajeros \n");
     }//GEN-LAST:event_jMenu_carga_mensajeroActionPerformed
 
     private void jMenu_cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_cerrar_sesionActionPerformed
         // TODO add your handling code here:
-        Ingreso nuevo = new Ingreso(users,mensajeros,lugares);
+        Ingreso nuevo = new Ingreso(users,mensajeros,lugares,def_ceros);
         nuevo.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenu_cerrar_sesionActionPerformed
@@ -270,6 +321,7 @@ public class Administrador extends javax.swing.JFrame {
                     "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
         }
         carga_lugares(archivo.getAbsolutePath());
+        jText_consola.append("se agregaron los lugares \n");
     }//GEN-LAST:event_jMenu_carga_lugarActionPerformed
 
     private void jMenu_carga_rutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_carga_rutaActionPerformed
@@ -285,6 +337,7 @@ public class Administrador extends javax.swing.JFrame {
                     "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
         }
         carga_ruta(archivo.getAbsolutePath());
+        jText_consola.append("se agregaron las rutas \n");
     }//GEN-LAST:event_jMenu_carga_rutaActionPerformed
 
     private void jMenu_lista_adyacenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_lista_adyacenciaActionPerformed
@@ -302,9 +355,47 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        lugares.ruta_corta(1,6);
+        //lugares.ruta_corta(1,6);
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jBoton_cerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBoton_cerosActionPerformed
+        // TODO add your handling code here:
+        String set_ceros = jText_cantidad_ceros.getText();
+        int in_ceros= Integer.parseInt(set_ceros);
+        this.def_ceros=in_ceros;
+    }//GEN-LAST:event_jBoton_cerosActionPerformed
+
+    private void jMenu_nodo_redActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_nodo_redActionPerformed
+        // TODO add your handling code here:
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON", "json");
+        selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        selector.setFileFilter(filtro);
+        int result = selector.showOpenDialog(this);
+        File archivo = selector.getSelectedFile();
+        if ((archivo==null) || (archivo.getName().equals(""))){
+            JOptionPane.showMessageDialog(this, "Nombre de archivo invalido",
+                    "Nombre de archivo invalido",JOptionPane.ERROR_MESSAGE);   
+        }
+        leer_nodo_blockchain(archivo.getAbsolutePath());
+        jText_consola.append("se mostrara el bloque seleccionado \n");
+        System.out.println(libro_entregas.gentxt_bloque());
+        
+        
+    }//GEN-LAST:event_jMenu_nodo_redActionPerformed
+
+    private void jMenu_blockchainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_blockchainActionPerformed
+        // TODO add your handling code here:
+        String d_img = libro_entregas.imagen_bloque("blockchain");
+        imagen_externo(d_img);
+    }//GEN-LAST:event_jMenu_blockchainActionPerformed
+
+    private void jMenu_arbol_merkleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_arbol_merkleActionPerformed
+        // TODO add your handling code here:
+        String d_img = libro_entregas.ultimo.data.imagen_Merkle("ultimo_merkle");
+        imagen_externo(d_img);
+    }//GEN-LAST:event_jMenu_arbol_merkleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,13 +434,16 @@ public class Administrador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBoton_ceros;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenu_arbol_merkle;
     private javax.swing.JMenuItem jMenu_blockchain;
     private javax.swing.JMenuItem jMenu_carga_lugar;
     private javax.swing.JMenuItem jMenu_carga_mensajero;
@@ -362,6 +456,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenu_nodo_red;
     private javax.swing.JMenuItem jMenu_tabla_dispersion;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jText_cantidad_ceros;
     private javax.swing.JTextArea jText_consola;
     // End of variables declaration//GEN-END:variables
     //metodos de lectura e muestra de imagenes
@@ -507,4 +602,49 @@ public class Administrador extends javax.swing.JFrame {
 
         }
     }
+    
+    private void leer_nodo_blockchain(String direccion){
+        JSONParser parser = new JSONParser();
+        
+        try(Reader reader = new FileReader(direccion)){
+            JSONObject objeto = (JSONObject) parser.parse(reader);
+            
+            if(objeto.size()>0){
+                for(Iterator iterator = objeto.keySet().iterator();iterator.hasNext();){
+                    String key = (String) iterator.next();
+                    JSONObject bloque = (JSONObject)objeto.get(key);
+                    int index = Math.toIntExact((Long) bloque.get("INDEX"));
+                    String fecha_d = (String) bloque.get("TIMESTAMP");
+                    int nonce = Math.toIntExact((Long) bloque.get("NONCE"));
+                    String prev_hash = (String)bloque.get("PREVIOUSHASH");
+                    String merkle_raiz = (String)bloque.get("ROOTMERKLE");
+                    String bloque_hash = (String)bloque.get("HASH");
+                    JSONArray datos = (JSONArray) bloque.get("DATA");
+                    Arbol_Merkle data = new Arbol_Merkle();
+                    for(int n = 0; n< datos.size();n++){
+                        JSONObject dato_int = (JSONObject)datos.get(n);
+                        String cliente = (String) dato_int.get("cliente");
+                        String mensajero = (String) dato_int.get("mensajero");
+                        String date_time = (String) dato_int.get("datetime");
+                        String sede = (String) dato_int.get("sede");
+                        String destino = (String) dato_int.get("destino");
+                        String cadena = sede+date_time+destino+cliente+mensajero;
+                        String fix = cadena.replace(" ","_");
+                        String hash = data.encriptar(fix);
+                        data.agregar(hash, sede, destino, fecha_d, cliente, mensajero);
+                    }
+                    libro_entregas.insertar(fecha_d, nonce, data, prev_hash, merkle_raiz, bloque_hash);
+                    
+                }
+            }
+        }catch (IOException e) {
+            System.out.println("EL ARCHIVO NO SE PUEDE ABRIR, O NO EXISTE");
+            
+        } catch (org.json.simple.parser.ParseException ex) {
+            System.out.println("EL ARCHIVO NO ES UN ARCHIVO JSON");
+
+        }
+    }
+    
+    
 }
